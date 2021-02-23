@@ -1,0 +1,9 @@
+/node_modules/
+/public/build/
+
+.DS_Store
+/.idea/csv-plugin.xml
+/.idea/modules.xml
+/.idea/misc.xml
+/svelte-app.iml
+/.idea/vcs.xml
