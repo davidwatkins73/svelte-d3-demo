@@ -1,16 +1,24 @@
 <script>
+	import StackChart from "./StackChart.svelte";
 	import Sankey from "./Sankey.svelte";
 	export let name;
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-
-	<Sankey/>
+	<div class="viz">
+		<StackChart/>
+	</div>
+	<div class="viz">
+		<Sankey/>
+	</div>
 </main>
 
 <style>
+	.viz {
+		display:inline-block;
+		width:50%;
+	}
 	main {
 		text-align: center;
 		padding: 1em;

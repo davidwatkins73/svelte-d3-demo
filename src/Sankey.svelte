@@ -1,6 +1,5 @@
 <script>
 import * as d3 from "d3";
-import {onMount} from "svelte";
 
 const margin = {
     left: 40,
@@ -76,7 +75,5 @@ $: svg = d3
 
 <button on:click={() => data = [...data, Math.random() * 1000]}>Mwoar</button>
 <style>
-    svg {
-        width: 50%;
-    }
+
 </style>
