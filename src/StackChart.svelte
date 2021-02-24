@@ -3,10 +3,10 @@ import * as d3 from "d3";
 
 const width = 400, height = 300;
 const margin = {
-    left: 40,
-    right: 40,
-    top: 40,
-    bottom: 10
+    left: 20,
+    right: 20,
+    top: 20,
+    bottom: 20
 };
 
 const keyNames = {
@@ -51,7 +51,7 @@ function reset() {
 const color = d3
     .scaleOrdinal()
     .domain(['r', 'a', 'g'])
-    .range(["red", "orange", "green"]);
+    .range(["#fd4d4d", "#eeb65f", "#a8e761"]);
 
 const xAxis = g => g
     .attr("transform", `translate(0,${height - margin.bottom})`)
@@ -113,6 +113,8 @@ $: {
         .data(series)
         .join("path")
         .attr("fill", (d) => color(d.key))
+        .attr("stroke", "#555")
+        .attr("stroke-width", 0.5)
         .attr("d", area)
         .append("title")
         .text(({key}) => keyNames[key]);
