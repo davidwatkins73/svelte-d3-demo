@@ -1,6 +1,7 @@
 <script>
 import * as d3 from "d3";
 
+const width = 400, height = 300;
 const margin = {
     left: 40,
     right: 40,
@@ -8,23 +9,21 @@ const margin = {
     bottom: 10
 };
 
-const width = 400, height = 300;
-
 const keyNames = {
     r: "Sell",
     a: "Hold",
     g: "Buy"
 };
 
-let data = [
-    { k:1, v: {r: 1, a: 3, g: 4 }},
-    { k:2, v: {r: 2, a: 6, g: 2 }},
-    { k:3, v: {r: 4, a: 4, g: 7 }},
-    { k:5, v: {r: 3, a: 4, g: 7 }},
-    { k:7, v: {r: 2, a: 8, g: 3 }}
-];
+function arr(count) {
+    const xs = [];
+    for (let i = 0; i < count; i ++) xs[i] = i;
+    return xs;
+}
 
+let data = [];
 let el;
+
 let idx = 8;
 
 function mwoar() {
@@ -32,13 +31,21 @@ function mwoar() {
     const datum = {
         k: idx,
         v: {
-            r: Math.random() * 5 + 3,
-            a: Math.random() * 5 + 4,
-            g: Math.random() * 5 + 2
+            r: arr(Math.random() * 5 + 3),
+            a: arr(Math.random() * 5 + 4),
+            g: arr(Math.random() * 5 + 2)
         }
     };
 
     data = [...data, datum];
+}
+
+function reset() {
+    data = [];
+    idx = 0;
+    mwoar();
+    mwoar();
+    mwoar();
 }
 
 const color = d3
@@ -64,6 +71,12 @@ const area = d3
     .y0(d => y(d[0]))
     .y1(d => y(d[1]))
 
+mwoar();
+mwoar();
+mwoar();
+
+// --------------
+
 $: svg = d3
     .select(el)
     .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
@@ -82,7 +95,7 @@ $: {
 $: series = d3
     .stack()
     .keys(['r', 'a', 'g'])
-    .value((d, k) => d.v[k])(data);
+    .value((d, k) => d.v[k].length)(data);
 
 $: y  = d3
     .scaleLinear()
@@ -99,7 +112,7 @@ $: {
         .selectAll("path")
         .data(series)
         .join("path")
-        .attr("fill", ({key}) => color(key))
+        .attr("fill", (d) => color(d.key))
         .attr("d", area)
         .append("title")
         .text(({key}) => keyNames[key]);
@@ -116,6 +129,7 @@ $: console.log({series});
 
 <svg bind:this={el}/>
 <button on:click={mwoar}>Mwoar!</button>
+<button on:click={reset}>Reset</button>
 <style>
     svg {
         border: 1px solid red;
