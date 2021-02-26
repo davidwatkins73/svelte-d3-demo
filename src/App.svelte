@@ -4,8 +4,6 @@
 	import Circles from "./Circles.svelte";
 	import Radar from "./Radar.svelte";
 	import SimpleRadial from "./SimpleRadial.svelte";
-
-	export let name;
 </script>
 
 <main>
