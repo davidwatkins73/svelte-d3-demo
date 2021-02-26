@@ -13,3 +13,10 @@
         </li>
     {/each}
 </ul>
+
+<style>
+    li:hover {
+        cursor: pointer;
+        color: green;
+    }
+</style>

@@ -10,6 +10,7 @@
 
 <path d={cross}
       fill="#ccc"
+      transform="rotate(45)"
       class="remove"
       on:click={() => dispatch('remove')}/>
 
