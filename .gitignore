@@ -7,3 +7,5 @@
 /.idea/misc.xml
 /svelte-app.iml
 /.idea/vcs.xml
+
+.vercel
