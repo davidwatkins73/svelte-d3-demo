@@ -1,22 +1,42 @@
 <script>
 	import StackChart from "./StackChart.svelte";
-	import Sankey from "./Sankey.svelte";
+	import StackBars from "./StackBars.svelte";
+	import Circles from "./Circles.svelte";
+	import Radar from "./Radar.svelte";
+	import SimpleRadial from "./SimpleRadial.svelte";
+
 	export let name;
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
+	<h1>Vizualization Demos</h1>
+	<h2>Simple Radial</h2>
+	<div class="viz">
+		<SimpleRadial/>
+	</div>
+	<h2>Radar</h2>
+	<div class="viz">
+		<Radar/>
+	</div>
+	<h2>Stack Bars</h2>
+	<div class="viz">
+		<StackBars/>
+	</div>
+	<p>Faint glow</p>
+	<h2>Stack Area</h2>
 	<div class="viz">
 		<StackChart/>
 	</div>
+	<h2>Circles</h2>
 	<div class="viz">
-		<Sankey/>
+		<Circles/>
 	</div>
 </main>
 
 <style>
 	.viz {
 		display:inline-block;
+		border: 1px solid red;
 		width:50%;
 	}
 	main {
@@ -30,6 +50,13 @@
 		color: #ff3e00;
 		text-transform: uppercase;
 		font-size: 4em;
+		font-weight: 100;
+	}
+
+	h2 {
+		color: #ff3e00;
+		text-transform: uppercase;
+		font-size: 3em;
 		font-weight: 100;
 	}
 

@@ -26,27 +26,21 @@ let el;
 
 let idx = 8;
 
-function mwoar() {
+function mwoar(start, end) {
     idx += Math.random() * 10 + 1;
     const datum = {
-        k: idx,
+        s: start,
+        e: end,
         v: {
-            r: arr(Math.random() * 5 + 3),
-            a: arr(Math.random() * 5 + 4),
-            g: arr(Math.random() * 5 + 2)
+            r: arr(Math.random() * 10 + 3),
+            a: arr(Math.random() * 15 + 4),
+            g: arr(Math.random() * 12 + 2)
         }
     };
 
     data = [...data, datum];
 }
 
-function reset() {
-    data = [];
-    idx = 0;
-    mwoar();
-    mwoar();
-    mwoar();
-}
 
 const color = d3
     .scaleOrdinal()
@@ -71,11 +65,19 @@ const area = d3
     .y0(d => y(d[0]))
     .y1(d => y(d[1]))
 
-mwoar();
-mwoar();
-mwoar();
+mwoar(0, 10);
+mwoar(10, 12);
+mwoar(12,17);
+mwoar(17,21);
+mwoar(21,25);
+mwoar(25,26);
+mwoar(26,45);
+mwoar(45,49);
 
 // --------------
+
+let blurDeviation = 1.5;
+let useBlur = true
 
 $: svg = d3
     .select(el)
@@ -84,6 +86,24 @@ $: svg = d3
     .attr("transform", `translate(${margin.left} ${margin.top})`);
 
 $: {
+    //Container for the gradients
+    const defs = svg.append("defs");
+
+//Filter for the outside glow
+    const filter = defs.append("filter")
+        .attr("id","glow");
+    filter
+        .append("feGaussianBlur")
+        .attr("result","coloredBlur");
+    const feMerge = filter
+        .append("feMerge");
+    feMerge
+        .append("feMergeNode")
+        .attr("in","coloredBlur");
+    feMerge
+        .append("feMergeNode")
+        .attr("in","SourceGraphic");
+
     svg.append("g")
         .classed("chart", true);
     svg.append("g")
@@ -104,20 +124,29 @@ $: y  = d3
 
 $: x = d3
     .scaleLinear()
-    .domain(d3.extent(data, d => d.k))
+    .domain([0, d3.max(data, d => d.e)])
     .range([margin.left, width - margin.right]);
 
 $: {
     svg.select("g.chart")
-        .selectAll("path")
+        .selectAll("g")
         .data(series)
-        .join("path")
-        .attr("fill", (d) => color(d.key))
-        .attr("stroke", "#555")
-        .attr("stroke-width", 0.5)
-        .attr("d", area)
+        .enter()
+        .append("g")
+        .style("fill", d => color(d.key))
+        .selectAll("rect")
+        .data(d => d)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => x(d.data.s))
+        .attr("y", d => y(d[1]))
+        .attr("height", d => y(d[0]) - y(d[1]))
+        .attr("width", d => x(d.data.e) - x(d.data.s))
+        .style("stroke", "white")
+        .style("stroke-width", 0.3)
         .append("title")
         .text(({key}) => keyNames[key]);
+
 
     svg.select("g.x-axis")
         .call(xAxis);
@@ -126,12 +155,23 @@ $: {
         .call(yAxis);
 }
 
-$: console.log({series});
-</script>
+$: svg.select('#glow feGaussianBlur').attr("stdDeviation", blurDeviation);
+
+$: svg.selectAll("rect").attr("filter", useBlur ? "url(#glow)" : "none")
+
+$: console.log({series, blurDeviation});</script>
 
 <svg bind:this={el}/>
-<button on:click={mwoar}>Mwoar!</button>
-<button on:click={reset}>Reset</button>
+
+<label>
+    Blur deviation ({blurDeviation || "-"})
+</label>
+<input type="range" min="0.1" max="10" step="0.1" bind:value={blurDeviation}/>
+
+<label>
+    Use blur
+    <input type="checkbox" bind:checked={useBlur}/>
+</label>
 
 <style>
 </style>

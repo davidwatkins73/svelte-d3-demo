@@ -63,7 +63,6 @@ $: {
 $: svg = d3
     .select(el)
     .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-    .style("border", "1px solid red")
     .append("g")
     .attr("transform", `translate(${margin.left} ${margin.top})`)
 
