@@ -15,6 +15,7 @@ const keyNames = {
     g: "Buy"
 };
 
+
 function arr(count) {
     const xs = [];
     for (let i = 0; i < count; i ++) xs[i] = i;
@@ -47,6 +48,7 @@ const color = d3
     .domain(['r', 'a', 'g'])
     .range(["#fd4d4d", "#eeb65f", "#a8e761"]);
 
+
 const xAxis = g => g
     .attr("transform", `translate(0,${height - margin.bottom})`)
     .call(d3
@@ -54,16 +56,13 @@ const xAxis = g => g
         .ticks(width / 80)
         .tickSizeOuter(0));
 
+
+
 const yAxis = g => g
     .attr("transform", `translate(${margin.left},0)`)
-    .call(d3.axisLeft(y))
-    .call(g => g.select(".domain").remove());
+    .call(d3.axisLeft(y));
 
-const area = d3
-    .area()
-    .x(d => x(d.data.k))
-    .y0(d => y(d[0]))
-    .y1(d => y(d[1]))
+
 
 mwoar(0, 10);
 mwoar(10, 12);
@@ -77,7 +76,17 @@ mwoar(45,49);
 // --------------
 
 let blurDeviation = 1.5;
-let useBlur = true
+let useBlur = true;
+let showAxes = true;
+
+$: d3.selectAll("g.axis")
+    .call(g => g
+        .selectAll(".domain")
+        .style("display", "none"))
+    .call(g => g
+        .selectAll(".tick line")
+        .style("display", showAxes ? "" : "none"));
+
 
 $: svg = d3
     .select(el)
@@ -107,8 +116,10 @@ $: {
     svg.append("g")
         .classed("chart", true);
     svg.append("g")
+        .classed("axis", true)
         .classed("x-axis", true);
     svg.append("g")
+        .classed("axis", true)
         .classed("y-axis", true);
 }
 
@@ -147,7 +158,6 @@ $: {
         .append("title")
         .text(({key}) => keyNames[key]);
 
-
     svg.select("g.x-axis")
         .call(xAxis);
 
@@ -159,7 +169,8 @@ $: svg.select('#glow feGaussianBlur').attr("stdDeviation", blurDeviation);
 
 $: svg.selectAll("rect").attr("filter", useBlur ? "url(#glow)" : "none")
 
-$: console.log({series, blurDeviation});</script>
+$: console.log({series, blurDeviation});
+</script>
 
 <svg bind:this={el}/>
 
@@ -171,6 +182,12 @@ $: console.log({series, blurDeviation});</script>
 <label>
     Use blur
     <input type="checkbox" bind:checked={useBlur}/>
+</label>
+
+
+<label>
+    Show Axes
+    <input type="checkbox" bind:checked={showAxes}/>
 </label>
 
 <style>
