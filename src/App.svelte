@@ -9,24 +9,28 @@
 </script>
 
 <main>
-	<h1>Vizualization Demos</h1>
+	<h1>Visualization Demos</h1>
+
 	<h2>Simple Radial</h2>
 	<div class="viz">
 		<SimpleRadial/>
 	</div>
+
 	<h2>Radar</h2>
 	<div class="viz">
 		<Radar/>
 	</div>
+
 	<h2>Stack Bars</h2>
 	<div class="viz">
 		<StackBars/>
 	</div>
-	<p>Faint glow</p>
+
 	<h2>Stack Area</h2>
 	<div class="viz">
 		<StackChart/>
 	</div>
+
 	<h2>Circles</h2>
 	<div class="viz">
 		<Circles/>
