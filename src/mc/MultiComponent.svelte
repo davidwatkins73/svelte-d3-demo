@@ -2,16 +2,16 @@
     import * as d3 from "d3";
     import _ from "lodash";
 
+    import {groupByUser, loadData} from "./utils";
+
     import Defs from "./Defs.svelte";
-    import {sanitize} from "./utils";
-    import RemoveLaneButton from "./RemoveLaneButton.svelte";
     import DeadList from "./DeadList.svelte";
+    import UserChart from "./UserChart.svelte";
 
-    const HEADER = ["hash", "committer", "time", "comment"].join("\t");
-
-    const width = 400, height = 300;
+    const width = 400;
+    const height = 300;
     const margin = {
-        left: 20,
+        left: 30,
         right: 20,
         top: 20,
         bottom: 20
@@ -21,27 +21,22 @@
     let el;  // bound to svg elem
     let data;
 
-    let dataPromise = d3
-        .text("./mc/data.tsv")
-        .then(d => d3.tsvParse(HEADER + "\n" + d))
-        .then(d => data = sanitize(d))
+    let dataPromise = loadData().then(d => data = d);
 
-    $: byUser = _.chain(data)
-        .groupBy("committer")
-        .omit(killList)
-        .value();
+    $: byUser = groupByUser(data, killList);
 
-    $: color = d3.scaleOrdinal()
+    $: color = d3
+        .scaleOrdinal()
         .range(d3.schemeSpectral[10])
         .domain(_.keys(byUser));
 
-    $: yScale = d3.scaleBand()
+    $: yScale = d3
+        .scaleBand()
         .domain(_.keys(byUser))
         .range([0, height - (margin.top + margin.bottom)])
-        .padding(0.2);
+        .padding(0.3);
 
     $: console.log({data, byUser})
-
 </script>
 
 <svg bind:this={el}
@@ -51,13 +46,11 @@
        transform="translate({margin.left} {margin.top})">
         {#each _.keys(byUser) as user}
             <g transform="translate(0 {yScale(user)})">
-                <rect x="0"
-                      height={yScale.bandwidth()}
-                      width={width - (margin.left + margin.right)}
-                      fill="url('#gradient-{user}')"/>
-                <g transform="translate( -10 {yScale.bandwidth()/2})">
-                    <RemoveLaneButton on:remove={() => killList= [...killList, user]}/>
-                </g>
+                <UserChart {user}
+                           data="byUser[user]"
+                           height={yScale.bandwidth()}
+                           width={width - (margin.left + margin.right)}
+                           on:remove={() => killList= [...killList, user]}/>
             </g>
         {/each}
     </g>

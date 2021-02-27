@@ -6,20 +6,20 @@
     const dispatch = createEventDispatcher();
 </script>
 
-{#if list}
-    <div>
-        Restore:
-        <ul>
-            {#each list as deadUser}
-                <li >
-                    <a on:click={() => dispatch("restore" , deadUser)}
-                       class="clickable">
-                        {deadUser}
-                    </a>
-                </li>
-            {/each}
-        </ul>
-    </div>
+{#if list.length > 0}
+<div>
+    Restore:
+    <ul>
+        {#each list as deadUser}
+        <li >
+            <a on:click={() => dispatch("restore" , deadUser)}
+               class="clickable">
+                {deadUser}
+            </a>
+        </li>
+        {/each}
+    </ul>
+</div>
 {/if}
 
 <style>
