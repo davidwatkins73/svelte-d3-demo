@@ -46,4 +46,8 @@
         content: '';
     }
 
+    li:hover {
+        color: green;
+    }
+
 </style>

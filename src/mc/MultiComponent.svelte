@@ -7,7 +7,7 @@
     import RemoveLaneButton from "./RemoveLaneButton.svelte";
     import DeadList from "./DeadList.svelte";
 
-    const HEADER = "hash\tcommitter\ttime\tcomment\n";
+    const HEADER = ["hash", "committer", "time", "comment"].join("\t");
 
     const width = 400, height = 300;
     const margin = {
@@ -23,7 +23,7 @@
 
     let dataPromise = d3
         .text("./mc/data.tsv")
-        .then(d => d3.tsvParse(HEADER + d))
+        .then(d => d3.tsvParse(HEADER + "\n" + d))
         .then(d => data = sanitize(d))
 
     $: byUser = _.chain(data)
@@ -39,9 +39,8 @@
         .domain(_.keys(byUser))
         .range([0, height - (margin.top + margin.bottom)])
         .padding(0.2);
-    const cross = d3.symbol(d3.symbolCross, 80)();
 
-    $: console.log({data, byUser, cross})
+    $: console.log({data, byUser})
 
 </script>
 
