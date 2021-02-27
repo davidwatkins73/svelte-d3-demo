@@ -69,6 +69,7 @@
 
 <style>
     .user-chart {
+        will-change: transform;
         transition: transform 0.3s;
     }
 </style>
