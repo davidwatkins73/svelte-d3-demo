@@ -2,7 +2,7 @@
     import * as d3 from "d3";
     import _ from "lodash";
 
-    import {groupByUser, loadData} from "./utils";
+    import {groupByUser, loadData, mkDateScale} from "./utils";
 
     import Defs from "./Defs.svelte";
     import DeadList from "./DeadList.svelte";
@@ -36,7 +36,11 @@
         .range([0, height - (margin.top + margin.bottom)])
         .padding(0.3);
 
+    $: dateScale = mkDateScale(data)
+        .range([0, width - (margin.left + margin.right)]);
+
     $: console.log({data, byUser})
+
 </script>
 
 <svg bind:this={el}
@@ -45,11 +49,11 @@
     <g class="chart"
        transform="translate({margin.left} {margin.top})">
         {#each _.keys(byUser) as user}
-            <g transform="translate(0 {yScale(user)})">
+            <g class="user-chart" transform="translate(0 {yScale(user)})">
                 <UserChart {user}
-                           data="byUser[user]"
+                           data={byUser[user]}
                            height={yScale.bandwidth()}
-                           width={width - (margin.left + margin.right)}
+                           {dateScale}
                            on:remove={() => killList= [...killList, user]}/>
             </g>
         {/each}
@@ -64,4 +68,7 @@
 </div>
 
 <style>
+    .user-chart {
+        transition: transform 0.3s;
+    }
 </style>

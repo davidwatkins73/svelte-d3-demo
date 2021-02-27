@@ -6,7 +6,8 @@
 
     const cross = d3.symbol(d3.symbolCross, 80)();
     const dispatch = createEventDispatcher();
-</script>
+
+ </script>
 
 
 <g class="remove"

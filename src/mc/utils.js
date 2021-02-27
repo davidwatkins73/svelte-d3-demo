@@ -9,19 +9,29 @@ const HEADER = [
     "comment"].join("\t");
 
 
-const fixes = {
-    "Dave Watkins": "David Watkins",
-    "Dave Watkis": "David Watkins",
-    "Kamran": "Kamran Saleem",
-    "kamransaleem": "Kamran Saleem",
-    "salekam": "Kamran Saleem"
+const nameReplacements = {
+    "dave watkins": "Dave",
+    "david watkins": "Dave",
+    "dave watkis": "Dave",
+    "kamran": "Kam",
+    "kamransaleem": "Kam",
+    "kamran saleem": "Kam",
+    "salekam": "Kam",
+    "thang to": "Thang",
+    "rohit vats": "Rohit"
 };
 
 
 function sanitize(xs = []) {
-    return _.map(
-        xs,
-        x => Object.assign({}, x, { committer: fixes[x.committer] || x.committer }));
+    return _.map(xs, x => Object.assign(
+        {},
+        x,
+        {
+            date: new Date(x.time),
+            committer: _.get(
+                nameReplacements,
+                [_.lowerCase(x.committer)],
+                x.committer)}));
 }
 
 
@@ -38,4 +48,10 @@ export function groupByUser(data, killList) {
         .groupBy("committer")
         .omit(killList)
         .value();
+}
+
+export function mkDateScale(data = []) {
+    return d3
+        .scaleUtc()
+        .domain(d3.extent(data, d => d.date));
 }
