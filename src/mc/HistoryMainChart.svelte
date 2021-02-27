@@ -2,11 +2,12 @@
     import * as d3 from "d3";
     import _ from "lodash";
 
-    import {groupByUser, loadData, mkDateScale} from "./utils";
+    import {groupByUser, loadData, mkDateScale, prettyDate} from "./utils";
 
     import Defs from "./Defs.svelte";
     import DeadList from "./DeadList.svelte";
     import UserChart from "./UserChart.svelte";
+    import {selectedDate} from "./stores/date-selection-store";
 
     const width = 400;
     const height = 300;
@@ -27,7 +28,7 @@
 
     $: color = d3
         .scaleOrdinal()
-        .range(d3.schemeSpectral[10])
+        .range(d3.schemeSpectral[6])
         .domain(_.keys(byUser));
 
     $: yScale = d3
@@ -39,17 +40,22 @@
     $: dateScale = mkDateScale(data)
         .range([4, width - (margin.left + margin.right) - 4]);
 
-    $: console.log({data, byUser})
+    $: console.log({data, byUser});
 
+    function pretty(date) {
+        return "bob!"
+    }
 </script>
 
 <svg bind:this={el}
      viewBox="0 0 {width} {height}">
+
     <Defs colors={color}/>
     <g class="chart"
        transform="translate({margin.left} {margin.top})">
         {#each _.keys(byUser) as user}
-            <g class="user-chart" transform="translate(0 {yScale(user)})">
+            <g class="user-chart"
+               transform="translate(0 {yScale(user)})">
                 <UserChart {user}
                            data={byUser[user]}
                            height={yScale.bandwidth()}
@@ -62,7 +68,11 @@
 
 <hr>
 
-<div style="height: 60px">
+<div class="footer">
+    {#if $selectedDate}
+    <div class="selected-date">
+                {prettyDate($selectedDate)}</div>
+    {/if}
     <DeadList list={killList}
               on:restore={u => killList = _.without(killList, u.detail)}/>
 </div>
@@ -71,5 +81,11 @@
     .user-chart {
         will-change: transform;
         transition: transform 0.3s;
+    }
+
+    .selected-date {
+        font-size: smaller;
+        color: #999;
+        margin-bottom: 1em;
     }
 </style>

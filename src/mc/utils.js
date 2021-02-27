@@ -50,8 +50,25 @@ export function groupByUser(data, killList) {
         .value();
 }
 
+
 export function mkDateScale(data = []) {
     return d3
         .scaleUtc()
         .domain(d3.extent(data, d => d.date));
+}
+
+
+export function evtToSVGCoords(evt, el) {
+    const pt = evt.target.ownerSVGElement.createSVGPoint();
+    pt.x = evt.clientX;
+    pt.y = evt.clientY;
+
+    // The cursor point, translated into svg coordinates
+    return pt.matrixTransform(el.getScreenCTM().inverse());
+}
+
+const dateFormat = d3.timeFormat("%B %d, %Y");
+
+export function prettyDate(d) {
+    return dateFormat(d);
 }

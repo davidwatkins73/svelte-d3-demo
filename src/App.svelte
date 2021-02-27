@@ -2,24 +2,24 @@
 	import StackChart from "./StackChart.svelte";
 	import StackBars from "./StackBars.svelte";
 	import Circles from "./Circles.svelte";
-	import MultiComponent from "./mc/MultiComponent.svelte";
+	import HistoryMainChart from "./mc/HistoryMainChart.svelte";
 	import SimpleRadial from "./SimpleRadial.svelte";
 </script>
 
 <main>
 	<h1>Visualization Demos</h1>
 
-
-	<h2>MultiComponent</h2>
-	<div class="viz">
-		<MultiComponent/>
-	</div>
-	<p>Attempting to use multiple components, combining svelte and d3</p>
-
 	<h2>Simple Radial</h2>
 	<div class="viz">
 		<SimpleRadial/>
 	</div>
+
+
+	<h2>MultiComponent</h2>
+	<div class="viz">
+		<HistoryMainChart/>
+	</div>
+	<p>Attempting to use multiple components, combining svelte and d3</p>
 
 	<h2>Stack Bars</h2>
 	<div class="viz">
@@ -41,7 +41,7 @@
 	.viz {
 		display:inline-block;
 		border: 1px solid red;
-		width:50%;
+		width:60%;
 	}
 	main {
 		text-align: center;

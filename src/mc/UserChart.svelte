@@ -1,6 +1,8 @@
 <script>
     import RemoveLaneButton from "./RemoveLaneButton.svelte";
     import * as d3 from "d3";
+    import {evtToSVGCoords} from "./utils";
+    import {selectedDate} from "./stores/date-selection-store";
 
     export let user;
     export let data = [];
@@ -40,17 +42,27 @@
 
         contribs.exit().remove();
     }
+
+
+    function onClick(evt) {
+        const coords = evtToSVGCoords(evt, el);
+        selectedDate.set(dateScale.invert(coords.x));
+    }
+
 </script>
 
 
 <rect x="0"
+      on:click={(e) => onClick(e)}
       style="opacity: 0.2"
       {height}
       width={dateScale.range()[1]}
       fill="url('#gradient-{user}')">
 </rect>
 
-<g bind:this={el} />
+<g class="chart"
+   bind:this={el}>
+</g>
 
 <text dy="-2"
       style="font-size: small">
