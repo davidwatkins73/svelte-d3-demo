@@ -37,7 +37,7 @@
         .padding(0.3);
 
     $: dateScale = mkDateScale(data)
-        .range([0, width - (margin.left + margin.right)]);
+        .range([4, width - (margin.left + margin.right) - 4]);
 
     $: console.log({data, byUser})
 
