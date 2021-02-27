@@ -64,8 +64,12 @@
     </g>
 </svg>
 
-<DeadList list={killList}
-          on:restore={u => killList = _.without(killList, u.detail)}/>
+<hr>
+
+<div style="height: 60px">
+    <DeadList list={killList}
+              on:restore={u => killList = _.without(killList, u.detail)}/>
+</div>
 
 <style>
 </style>
