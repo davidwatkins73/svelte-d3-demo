@@ -1,53 +1,39 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import _ from "lodash";
 
-    export let list;
+    import {killList} from "./stores/filters-store";
 
-    const dispatch = createEventDispatcher();
+
+    function restore(u) {
+        killList.update(xs => _.without(xs, u));
+    }
 </script>
 
-{#if list.length > 0}
-<div>
-    Restore:
-    <ul>
-        {#each list as deadUser}
-        <li >
-            <a on:click={() => dispatch("restore" , deadUser)}
-               class="clickable">
-                {deadUser}
-            </a>
-        </li>
-        {/each}
-    </ul>
-</div>
-{/if}
+<ul>
+    {#each $killList as deadUser}
+    <li>
+        <button class="link"
+                on:click={() => restore(deadUser)}>
+            {deadUser}
+        </button>
+    </li>
+    {:else}
+        <li class="info">Click on the 'x' to remove contributors from graph</li>
+    {/each}
+</ul>
 
 <style>
-    div {
-        padding-left: 2em;
-        text-align: left;
-    }
 
     ul {
-        display: inline-block;
+        margin-top: 0;
     }
 
     li {
-        display: inline-block;
+        list-style: none;
     }
 
-    li::after {
-        content: "|";
-        padding-left: 1em;
-        padding-right: 1em;
-    }
-
-    li:last-child:after {
-        content: '';
-    }
-
-    li:hover {
-        color: green;
+    .info {
+        color: #888
     }
 
 </style>

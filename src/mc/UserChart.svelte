@@ -1,8 +1,11 @@
 <script>
-    import RemoveLaneButton from "./RemoveLaneButton.svelte";
     import * as d3 from "d3";
+
     import {evtToSVGCoords} from "./utils";
+    import RemoveLaneButton from "./RemoveLaneButton.svelte";
     import {selectedDate} from "./stores/date-selection-store";
+    import {showWorkDayGuideLines} from "./stores/overlays-store";
+    import {killList} from "./stores/filters-store";
 
     export let user;
     export let data = [];
@@ -12,7 +15,7 @@
 
     $: hourScale = d3
         .scaleLinear()
-        .domain([6, 20])
+        .domain([5, 23])
         .range([3, height - 3])
         .clamp(true)
 
@@ -22,14 +25,15 @@
         const contribs = d3
             .select(el)
             .selectAll(".contrib")
-            .data(data, d => d.hash);
+            .data(data, d => d.hash)
 
         const newContribs = contribs
             .enter()
             .append("circle")
             .attr("cx", d => dateScale(d.date))
             .attr("cy", d => hourScale(d.date.getHours()))
-            .classed("contrib", true);
+            .classed("contrib", true)
+            .on("mouseover", (e, d) => console.log(d))
 
         newContribs
             .merge(contribs)
@@ -37,7 +41,7 @@
             .attr("cx", d => dateScale(d.date))
             .attr("cy", d => hourScale(d.date.getHours()))
             .attr("r", 2)
-            .style("fill", "#f38237")
+            .style("fill", d => d.isMerge ? "#9fea92" : "#f38237")
             .style("opacity", 0.3);
 
         contribs.exit().remove();
@@ -48,6 +52,13 @@
         const coords = evtToSVGCoords(evt, el);
         selectedDate.set(dateScale.invert(coords.x));
     }
+
+
+    function onRemove() {
+        console.log("Remove", user)
+        killList.update(xs => [...xs, user]);
+    }
+
 
 </script>
 
@@ -60,6 +71,19 @@
       fill="url('#gradient-{user}')">
 </rect>
 
+{#if $showWorkDayGuideLines}
+<line class="workday-line start"
+      x1="0"
+      x2={dateScale.range()[1]}
+      y1={hourScale(8.5)}
+      y2={hourScale(8.5)}/>
+<line class="workday-line end"
+      x1="0"
+      x2={dateScale.range()[1]}
+      y1={hourScale(17.5)}
+      y2={hourScale(17.5)}/>
+{/if}
+
 <g class="chart"
    bind:this={el}>
 </g>
@@ -70,10 +94,14 @@
 </text>
 
 <g transform="translate( -20)">
-    <RemoveLaneButton {height}
-                      on:remove/>
+    <RemoveLaneButton {height} on:remove={onRemove}/>
 </g>
 
 
 <style>
+    .workday-line {
+        stroke-width: 0.4;
+        stroke: #ddcef6;
+        stroke-dasharray: 2 1;
+    }
 </style>

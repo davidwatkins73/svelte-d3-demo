@@ -2,12 +2,13 @@
     import * as d3 from "d3";
     import _ from "lodash";
 
-    import {groupByUser, loadData, mkDateScale, prettyDate} from "./utils";
-
     import Defs from "./Defs.svelte";
-    import DeadList from "./DeadList.svelte";
     import UserChart from "./UserChart.svelte";
-    import {selectedDate} from "./stores/date-selection-store";
+    import DetailPanel from "./DetailPanel.svelte";
+
+    import {killList, showMerges} from "./stores/filters-store";
+    import {groupByUser, loadData, mkDateScale} from "./utils";
+
 
     const width = 400;
     const height = 300;
@@ -18,13 +19,16 @@
         bottom: 20
     };
 
-    let killList = [];
     let el;  // bound to svg elem
     let data;
 
-    let dataPromise = loadData().then(d => data = d);
+    loadData().then(d => data = d);
 
-    $: byUser = groupByUser(data, killList);
+    $: byUser = groupByUser(
+        _.filter(data, d => $showMerges
+            ? true
+            : !d.isMerge),
+        $killList);
 
     $: color = d3
         .scaleOrdinal()
@@ -40,52 +44,52 @@
     $: dateScale = mkDateScale(data)
         .range([4, width - (margin.left + margin.right) - 4]);
 
-    $: console.log({data, byUser});
 
-    function pretty(date) {
-        return "bob!"
-    }
 </script>
 
-<svg bind:this={el}
-     viewBox="0 0 {width} {height}">
 
-    <Defs colors={color}/>
-    <g class="chart"
-       transform="translate({margin.left} {margin.top})">
-        {#each _.keys(byUser) as user}
-            <g class="user-chart"
-               transform="translate(0 {yScale(user)})">
-                <UserChart {user}
-                           data={byUser[user]}
-                           height={yScale.bandwidth()}
-                           {dateScale}
-                           on:remove={() => killList= [...killList, user]}/>
-            </g>
-        {/each}
-    </g>
-</svg>
 
-<hr>
+<div class="column left">
+    <svg bind:this={el}
+         viewBox="0 0 {width} {height}">
 
-<div class="footer">
-    {#if $selectedDate}
-    <div class="selected-date">
-                {prettyDate($selectedDate)}</div>
-    {/if}
-    <DeadList list={killList}
-              on:restore={u => killList = _.without(killList, u.detail)}/>
+        <Defs colors={color}/>
+        <g class="chart"
+           transform="translate({margin.left} {margin.top})">
+            {#each _.keys(byUser) as user}
+                <g class="user-chart"
+                   transform="translate(0 {yScale(user)})">
+                    <UserChart {user}
+                               data={byUser[user]}
+                               height={yScale.bandwidth()}
+                               {dateScale}/>
+                </g>
+            {/each}
+        </g>
+    </svg>
+</div>
+
+<div class="column right">
+    <DetailPanel/>
 </div>
 
 <style>
+    .column {
+        float: left;
+    }
+
+    .left {
+        width: 70%;
+    }
+
+    .right {
+        width: 30%;
+        text-align: left;
+    }
+
     .user-chart {
         will-change: transform;
         transition: transform 0.3s;
     }
 
-    .selected-date {
-        font-size: smaller;
-        color: #999;
-        margin-bottom: 1em;
-    }
 </style>

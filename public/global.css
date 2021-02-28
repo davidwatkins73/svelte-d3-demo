@@ -65,3 +65,13 @@ button:focus {
 .clickable:hover {
 	cursor: pointer;
 }
+
+button.link {
+	text-align: left;
+	color: blue;
+	background: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+}

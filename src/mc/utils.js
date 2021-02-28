@@ -13,12 +13,27 @@ const nameReplacements = {
     "dave watkins": "Dave",
     "david watkins": "Dave",
     "dave watkis": "Dave",
+    "dwatkins": "Dave",
+    "david.watkins@db.com": "Dave",
     "kamran": "Kam",
     "kamransaleem": "Kam",
     "kamran saleem": "Kam",
     "salekam": "Kam",
     "thang to": "Thang",
-    "rohit vats": "Rohit"
+    "rohit vats": "Rohit",
+    "maoo": "FINOS",
+    "maurizio pillitu": "FINOS",
+    "gabriele columbro": "FINOS",
+    "peacall": "Ally",
+    "jessica woodland-scott": "Jess",
+    "jwoodland-scott": "Jess",
+    "jessicawoodland-scott": "Jess",
+    "woodjes": "Jess",
+    "ashley kearsley": "Ash",
+    "sally e ellard": "Sally",
+    "mark guerriero": "Mark",
+    "benoi": "Benoit",
+    "Vaishnavi Gharote": "Vaishnavi"
 };
 
 
@@ -28,9 +43,10 @@ function sanitize(xs = []) {
         x,
         {
             date: new Date(x.time),
+            isMerge: _.toLower(x.comment).indexOf("merge") > -1,
             committer: _.get(
                 nameReplacements,
-                [_.lowerCase(x.committer)],
+                [x.committer.toLowerCase()],
                 x.committer)}));
 }
 
