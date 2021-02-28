@@ -39,7 +39,7 @@
         .scaleBand()
         .domain(_.map(rowData, d => d.committer))
         .range([0, height - (margin.top + margin.bottom)])
-        .padding(0.3);
+        .padding(0.15);
 
     $: dateScale = mkDateScale(data)
         .range([4, width - (margin.left + margin.right) - 4]);

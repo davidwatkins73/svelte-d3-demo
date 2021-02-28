@@ -76,12 +76,14 @@
           x1="0"
           x2={dateScale.range()[1]}
           y1={hourScale(8.5)}
-          y2={hourScale(8.5)}/>
+          y2={hourScale(8.5)}>
+    </line>
     <line class="workday-line end"
           x1="0"
           x2={dateScale.range()[1]}
           y1={hourScale(17.5)}
-          y2={hourScale(17.5)}/>
+          y2={hourScale(17.5)}>
+    </line>
 {/if}
 
 <g class="chart"
