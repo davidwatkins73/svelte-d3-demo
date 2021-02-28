@@ -34,17 +34,13 @@
             .attr("cx", d => dateScale(d.date))
             .attr("cy", d => hourScale(d.date.getHours()))
             .classed("contrib", true)
-            .on("mouseover", (e, d) => {
-                tooltip.set({
-                    title: prettyDate(d.date),
-                    body: d.comment,
-                    top: e.pageY - 10,
-                    left: e.pageX + 10
-                });
-            })
-            .on("mouseleave", (e, d) => {
-                tooltip.set(null);
-            });
+            .on("mouseover", (e, d) => tooltip.set({
+                title: prettyDate(d.date),
+                body: d.comment,
+                top: e.pageY - 10,
+                left: e.pageX + 10
+            }))
+            .on("mouseleave", (e, d) => tooltip.set(null));
 
 
         newContribs
