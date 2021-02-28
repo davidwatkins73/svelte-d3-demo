@@ -88,7 +88,7 @@
    bind:this={el}>
 </g>
 
-<text dy={height / 2 + 3}
+<text dy={height / 2 + 2}
       dx="2"
       class="label">
     {user}
@@ -102,7 +102,7 @@
 <style>
     .label {
         fill: #671d27;
-        font-size: 11px
+        font-size: 10px
     }
 
     .workday-line {
