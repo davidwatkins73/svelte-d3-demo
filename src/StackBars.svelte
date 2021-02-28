@@ -169,7 +169,6 @@ $: svg.select('#glow feGaussianBlur').attr("stdDeviation", blurDeviation);
 
 $: svg.selectAll("rect").attr("filter", useBlur ? "url(#glow)" : "none")
 
-$: console.log({series, blurDeviation});
 </script>
 
 <svg bind:this={el}/>

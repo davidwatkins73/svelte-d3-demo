@@ -21,19 +21,21 @@ const nameReplacements = {
     "salekam": "Kam",
     "thang to": "Thang",
     "rohit vats": "Rohit",
-    "maoo": "FINOS",
-    "maurizio pillitu": "FINOS",
-    "gabriele columbro": "FINOS",
-    "peacall": "Ally",
     "jessica woodland-scott": "Jess",
     "jwoodland-scott": "Jess",
     "jessicawoodland-scott": "Jess",
     "woodjes": "Jess",
-    "ashley kearsley": "Ash",
-    "sally e ellard": "Sally",
     "mark guerriero": "Mark",
-    "benoi": "Benoit",
-    "Vaishnavi Gharote": "Vaishnavi"
+    "vaishnavi gharote": "Vaishnavi",
+    "benoi": "Other DB",
+    "sally e ellard": "Other DB",
+    "ashley kearsley": "Other DB",
+    "peacall": "Other DB",
+    "devin macalalad": "Other",
+    "gabriele columbro": "Other",
+    "maoo": "Other",
+    "maurizio pillitu": "Other",
+    "dependabot-preview[bot]": "Other"
 };
 
 
@@ -43,7 +45,7 @@ function sanitize(xs = []) {
         x,
         {
             date: new Date(x.time),
-            isMerge: _.toLower(x.comment).indexOf("merge") > -1,
+            isMerge: _.toLower(x.comment).trim().indexOf("merge") > -1,
             committer: _.get(
                 nameReplacements,
                 [x.committer.toLowerCase()],
@@ -60,9 +62,14 @@ export function loadData() {
 
 
 export function groupByUser(data, killList) {
-    return _.chain(data)
+    console.log("gbu", data)
+    return _
+        .chain(data)
         .groupBy("committer")
         .omit(killList)
+        .map((v,k)  => ({committer: k, values: v}))
+        .orderBy(d => d.committer)
+        .reject(d => _.includes(killList, d.committer))
         .value();
 }
 

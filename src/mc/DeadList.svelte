@@ -10,7 +10,7 @@
 </script>
 
 <ul>
-    {#each $killList as deadUser}
+    {#each _.orderBy($killList) as deadUser}
     <li>
         <button class="link"
                 on:click={() => restore(deadUser)}>

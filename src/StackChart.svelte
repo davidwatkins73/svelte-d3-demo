@@ -126,7 +126,6 @@ $: {
         .call(yAxis);
 }
 
-$: console.log({series});
 </script>
 
 <svg bind:this={el}/>

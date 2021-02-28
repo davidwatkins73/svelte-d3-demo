@@ -72,24 +72,25 @@
 </rect>
 
 {#if $showWorkDayGuideLines}
-<line class="workday-line start"
-      x1="0"
-      x2={dateScale.range()[1]}
-      y1={hourScale(8.5)}
-      y2={hourScale(8.5)}/>
-<line class="workday-line end"
-      x1="0"
-      x2={dateScale.range()[1]}
-      y1={hourScale(17.5)}
-      y2={hourScale(17.5)}/>
+    <line class="workday-line start"
+          x1="0"
+          x2={dateScale.range()[1]}
+          y1={hourScale(8.5)}
+          y2={hourScale(8.5)}/>
+    <line class="workday-line end"
+          x1="0"
+          x2={dateScale.range()[1]}
+          y1={hourScale(17.5)}
+          y2={hourScale(17.5)}/>
 {/if}
 
 <g class="chart"
    bind:this={el}>
 </g>
 
-<text dy="-2"
-      style="font-size: small">
+<text dy={height / 2 + 3}
+      dx="2"
+      class="label">
     {user}
 </text>
 
@@ -99,6 +100,11 @@
 
 
 <style>
+    .label {
+        fill: #671d27;
+        font-size: 11px
+    }
+
     .workday-line {
         stroke-width: 0.4;
         stroke: #ddcef6;
