@@ -5,8 +5,8 @@
     export let height;
 
     const cross = d3.symbol(d3.symbolCross, 80)();
-    const dispatch = createEventDispatcher();
 
+    let dispatch = createEventDispatcher();
  </script>
 
 
@@ -18,7 +18,7 @@
           {height}>
     </rect>
     <g transform="translate(10 {height / 2})">
-        <path d={cross}/>
+        <path d={cross}></path>
     </g>
 </g>
 

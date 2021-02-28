@@ -8,6 +8,7 @@
 
     import {killList, showMerges} from "./stores/filters-store";
     import {groupByUser, loadData, mkDateScale} from "./utils";
+    import Tooltip from "./Tooltip.svelte";
 
 
     const width = 400;
@@ -44,9 +45,13 @@
     $: dateScale = mkDateScale(data)
         .range([4, width - (margin.left + margin.right) - 4]);
 
-    $: console.log({rowData, data})
+    $: console.log({rowData, data});
+
+
 </script>
 
+
+<Tooltip/>
 
 
 <div class="column left">
@@ -68,6 +73,7 @@
         </g>
     </svg>
 </div>
+
 
 <div class="column right">
     <DetailPanel/>
@@ -91,5 +97,6 @@
         will-change: transform;
         transition: transform 0.3s;
     }
+
 
 </style>

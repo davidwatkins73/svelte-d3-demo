@@ -1,11 +1,12 @@
 <script>
     import * as d3 from "d3";
 
-    import {evtToSVGCoords} from "./utils";
+    import {evtToSVGCoords, prettyDate} from "./utils";
     import RemoveLaneButton from "./RemoveLaneButton.svelte";
     import {selectedDate} from "./stores/date-selection-store";
     import {showWorkDayGuideLines} from "./stores/overlays-store";
     import {killList} from "./stores/filters-store";
+    import {tooltip} from "./stores/tooltip-store";
 
     export let user;
     export let data = [];
@@ -33,14 +34,25 @@
             .attr("cx", d => dateScale(d.date))
             .attr("cy", d => hourScale(d.date.getHours()))
             .classed("contrib", true)
-            .on("mouseover", (e, d) => console.log(d))
+            .on("mouseover", (e, d) => {
+                tooltip.set({
+                    title: prettyDate(d.date),
+                    body: d.comment,
+                    top: e.pageY - 10,
+                    left: e.pageX + 10
+                });
+            })
+            .on("mouseleave", (e, d) => {
+                tooltip.set(null);
+            });
+
 
         newContribs
             .merge(contribs)
             .transition(d3.transition(300))
             .attr("cx", d => dateScale(d.date))
             .attr("cy", d => hourScale(d.date.getHours()))
-            .attr("r", 2)
+            .attr("r", 3)
             .style("fill", d => d.isMerge ? "#9fea92" : "#f38237")
             .style("opacity", 0.3);
 
@@ -58,7 +70,6 @@
         console.log("Remove", user)
         killList.update(xs => [...xs, user]);
     }
-
 
 </script>
 
