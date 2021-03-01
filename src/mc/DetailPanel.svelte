@@ -11,7 +11,7 @@
 
 <div style="padding-top: 1em; color: #888; font-size: smaller" >
     <p>
-        This demo uses a slice of the Waltz commit log (2017-2018)
+        This demo uses a slice of the Waltz commit log (2020-2021)
         and charts commits during this period.
     </p>
     <p>
