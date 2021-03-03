@@ -4,11 +4,16 @@
 	import Circles from "./Circles.svelte";
 	import HistoryMainChart from "./mc/HistoryMainChart.svelte";
 	import SimpleRadial from "./SimpleRadial.svelte";
+	import Splat from "./Splat.svelte";
 </script>
 
 <main>
 	<h1>Visualization Demos</h1>
 
+	<h2>Splats</h2>
+	<div class="viz">
+		<Splat/>
+	</div>
 
 	<h2>MultiComponent (Git Logs)</h2>
 	<div class="viz" style="width: 90%">
