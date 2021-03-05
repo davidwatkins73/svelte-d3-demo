@@ -5,7 +5,7 @@
     import {colorBySource} from "./config-store"
     import Sankey from "./Sankey.svelte";
 
-    let chartData = _.map(_.range(70), () => mkData());
+    let chartData = _.map(_.range(60), () => mkData());
 
     let interval = null;
 
