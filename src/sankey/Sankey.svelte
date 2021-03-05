@@ -4,7 +4,7 @@
     import _ from "lodash";
 
     import {cmp, mkColorScales, toChartDimensions} from "./utils";
-    import {colorBySource} from "./config-store"
+    import {colorBySource} from "./config-store";
 
     const d3 = {
         ...d3core,

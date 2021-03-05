@@ -54,10 +54,13 @@
         }];
     }
 
-    mwoar(); mwoar(); mwoar();
+    // "with a rebel yell, she cried"
+    mwoar();
+    mwoar();
+    mwoar();
 </script>
 
-<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 600 400" width="100%" xmlns="http://www.w3.org/2000/svg">
         <filter id="displacementFilter">
             <feTurbulence type="turbulence" baseFrequency="0.05"
                           numOctaves="2" result="turbulence"/>
