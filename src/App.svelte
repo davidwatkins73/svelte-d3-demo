@@ -5,10 +5,16 @@
 	import HistoryMainChart from "./mc/HistoryMainChart.svelte";
 	import SimpleRadial from "./SimpleRadial.svelte";
 	import Splat from "./Splat.svelte";
+	import SankeyDemo from "./sankey/SankeyDemo.svelte";
 </script>
 
 <main>
 	<h1>Visualization Demos</h1>
+
+	<h2>Mini Sankey</h2>
+	<div class="viz">
+		<SankeyDemo/>
+	</div>
 
 	<h2>Splats</h2>
 	<div class="viz">
@@ -25,8 +31,6 @@
 	<div class="viz">
 		<SimpleRadial/>
 	</div>
-
-
 
 	<h2>Stack Bars</h2>
 	<div class="viz">
@@ -50,6 +54,7 @@
 		border: 1px solid red;
 		width:60%;
 	}
+
 	main {
 		text-align: center;
 		padding: 1em;

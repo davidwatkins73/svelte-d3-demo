@@ -62,7 +62,6 @@ export function loadData() {
 
 
 export function groupByUser(data, killList) {
-    console.log("gbu", data)
     return _
         .chain(data)
         .groupBy("committer")

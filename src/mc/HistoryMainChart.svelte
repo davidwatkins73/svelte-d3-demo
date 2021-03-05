@@ -44,10 +44,6 @@
 
     $: dateScale = mkDateScale(data)
         .range([4, width - (margin.left + margin.right) - 4]);
-
-    $: console.log({rowData, data});
-
-
 </script>
 
 

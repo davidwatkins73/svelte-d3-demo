@@ -69,4 +69,4 @@
 
 <br>
 
-<button on:click={() => mwoar()}>Mwoar</button>
+<button on:click={() => mwoar()}>Mwoar - Currently: {data.length}</button>
