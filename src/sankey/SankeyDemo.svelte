@@ -5,7 +5,22 @@
     import {colorBySource} from "./config-store"
     import Sankey from "./Sankey.svelte";
 
-    let chartData = _.map(_.range(30), () => mkData());
+    let chartData = _.map(_.range(70), () => mkData());
+
+    let interval = null;
+
+    function toggleAnimation() {
+        if (interval) {
+            clearInterval(interval);
+            interval = null;
+        } else {
+            interval = setInterval(
+                () => chartData[Math.floor(Math.random() * chartData.length)] = mkData(),
+                600);
+        }
+    }
+
+    toggleAnimation();
 
 </script>
 
@@ -34,6 +49,9 @@
 
     <button on:click={() => chartData = [...chartData, mkData()]}>
         Mwoar
+    </button>
+    <button on:click={() => toggleAnimation()}>
+        {interval ? "Disable" : "Enable"} Animation
     </button>
 </div>
 
