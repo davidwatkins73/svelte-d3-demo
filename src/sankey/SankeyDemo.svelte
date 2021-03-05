@@ -1,5 +1,5 @@
 <script>
-    import {mkData} from "./Data.js"
+    import {mkData} from "./data.js"
     import {colorBySource} from "./config-store"
     import Sankey from "./Sankey.svelte";
 
