@@ -32,5 +32,5 @@ export function mkColorScales(data) {
         .domain(fgColor.domain())
         .range(fgColor.range().map(c => d3.hsl(c).brighter(0.2)))
 
-    return {fg: fgColor, bg: bgColor};
+    return {node: fgColor, link: bgColor};
 }

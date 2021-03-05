@@ -6,6 +6,7 @@
     import {cmp, mkColorScales, toChartDimensions} from "./utils";
     import {colorBySource} from "./config-store";
 
+    // merge d3 and the d3-sankey apis
     const d3 = {
         ...d3core,
         ...d3sk
@@ -32,6 +33,7 @@
         .nodeSort((a, b) => cmp(a.rank, b.rank))
         .extent([[0, 0], [chartDimensions.width, chartDimensions.height]])
         ({
+            // take copies of the input so we don't mutate it
             nodes: data.nodes.map(n => Object.assign({}, n)),
             links: data.links.map(l => Object.assign({}, l))
         });
@@ -40,7 +42,9 @@
     const chartDimensions = toChartDimensions(dimensions, margins);
 
 
-    function drawNodes(layout, elem, color) {
+    function drawNodes(layout,
+                       elem,
+                       color) {
         const nodes = elem
             .selectAll(".node")
             .data(layout.nodes, d => d.id);
@@ -66,7 +70,10 @@
     }
 
 
-    function drawLinks(layout, linksElem, color, categoryProvider = d => d.source.category.code) {
+    function drawLinks(layout,
+                       linksElem,
+                       color,
+                       categoryProvider = d => d.source.category.code) {
         const links = linksElem
             .selectAll(".link")
             .data(layout.links, d => `${d.source.id}_${d.target.id}`);
@@ -100,7 +107,7 @@
     let scales;
 
     $: {
-        const scales = mkColorScales(data);
+        const colors = mkColorScales(data);
         const nodesElem = d3.select(chartEl).select(".nodes");
         const linksElem = d3.select(chartEl).select(".links");
 
@@ -109,12 +116,12 @@
         drawNodes(
             layout,
             nodesElem,
-            scales.fg);
+            colors.node);
 
         drawLinks(
             layout,
             linksElem,
-            scales.bg,
+            colors.link,
             $colorBySource
                 ? d => d.source.category.code
                 : d => d.target.category.code);
@@ -136,9 +143,3 @@
 
 </div>
 
-
-<style>
-    svg {
-
-    }
-</style>
