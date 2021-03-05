@@ -10,6 +10,10 @@
 
 <main>
 	<h1>Visualization Demos</h1>
+	<p>
+		A collection of simple visualisations created whilst learning about Svelte and D3.
+		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
+	</p>
 
 	<h2>Mini Sankey</h2>
 	<div class="viz">

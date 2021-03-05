@@ -1,5 +1,6 @@
 <script>
     import _ from "lodash";
+    import {onDestroy} from "svelte"
 
     import {mkData} from "./data.js"
     import {colorBySource} from "./config-store"
@@ -21,6 +22,9 @@
     }
 
     toggleAnimation();
+
+    onDestroy(() => interval && clearInterval());
+
 
 </script>
 
