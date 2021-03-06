@@ -6,7 +6,7 @@
     import {colorBySource} from "./config-store"
     import Sankey from "./Sankey.svelte";
 
-    let chartData = _.map(_.range(60), () => mkData());
+    let chartData = _.map(_.range(20), () => mkData());
 
     let interval = null;
 
@@ -23,8 +23,7 @@
 
     toggleAnimation();
 
-    onDestroy(() => interval && clearInterval());
-
+    onDestroy(() => interval && clearInterval(interval));
 
 </script>
 
