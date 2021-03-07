@@ -7,6 +7,8 @@
 	import Splat from "./Splat.svelte";
 	import SankeyDemo from "./sankey/SankeyDemo.svelte";
 	import Curves from "./Curves.svelte";
+	import Timeline from "./tl/Timeline.svelte";
+	import TimelineDemo from "./tl/TimelineDemo.svelte";
 </script>
 
 <main>
@@ -15,6 +17,11 @@
 		A collection of simple visualisations created whilst learning about Svelte and D3.
 		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
 	</p>
+
+	<h2>Timelines</h2>
+	<div class="viz">
+		<TimelineDemo/>
+	</div>
 
 	<h2>Curves</h2>
 	<div class="viz">
