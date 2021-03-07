@@ -117,45 +117,59 @@
     </g>
 </svg>
 
-<div>
-    <b style="color: purple">
-        Start
-        ({sx} {sy})
-    </b>
-
-    <input type="range" min="0" max="500" bind:value={sx}/>
-    <input type="range" min="0" max="400" bind:value={sy}/>
-</div>
-<div>
-    <b style="color: red">
-        C1
-        ({c1x} {c1y})
-    </b>
-    <input type="range" min="0" max="500" bind:value={c1x}/>
-    <input type="range" min="0" max="400" bind:value={c1y}/>
-</div>
-<div>
-    <b style="color: green">
-        C2
-        ({c2x} {c2y})
-    </b>
-    <input type="range" min="0" max="500" bind:value={c2x}/>
-    <input type="range" min="0" max="400" bind:value={c2y}/>
-</div>
-<div>
-    <b style="color: blue">
-        End
-        ({ex} {ey})
-    </b>
-    <input type="range" min="0" max="500" bind:value={ex}/>
-    <input type="range" min="0" max="400" bind:value={ey}/>
-</div>
-<div>
-    <b>Width ({sw})</b>
-    <input type="range" min="1" max="100" bind:value={sw}/>
-</div>
+<table>
+    <colgroup>
+        <col width="20%">
+        <col width="20%">
+        <col width="30%">
+        <col width="30%">
+    </colgroup>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>X</th>
+        <th>Y</th>
+    </tr>
+    </thead>
+    <tr style="color:purple">
+        <td>Start</td>
+        <td>{sx} {sy}</td>
+        <td><input type="range" min="0" max="500" bind:value={sx}/></td>
+        <td><input type="range" min="0" max="500" bind:value={sy}/></td>
+    </tr>
+    <tr style="color:red">
+        <td>C1</td>
+        <td>{c1x} {c1y}</td>
+        <td><input type="range" min="0" max="500" bind:value={c1x}/></td>
+        <td><input type="range" min="0" max="500" bind:value={c1y}/></td>
+    </tr>
+    <tr style="color:green">
+        <td>C2</td>
+        <td>{c2x} {c2y}</td>
+        <td><input type="range" min="0" max="500" bind:value={c2x}/></td>
+        <td><input type="range" min="0" max="500" bind:value={c2y}/></td>
+    </tr>
+    <tr style="color:blue">
+        <td>End</td>
+        <td>{ex} {ey}</td>
+        <td><input type="range" min="0" max="500" bind:value={ex}/></td>
+        <td><input type="range" min="0" max="500" bind:value={ey}/></td>
+    </tr>
+    <tr>
+        <td>Width</td>
+        <td>{sw}</td>
+        <td colspan="2">
+            <input type="range" min="1" max="100" bind:value={sw}/>
+        </td>
+        <td></td>
+    </tr>
+</table>
 
 <style>
+    table td {
+        text-align: center;
+    }
     .point-labels text {
         font-family: monospace;
     }
@@ -164,4 +178,5 @@
         stroke-width: 1;
         stroke-dasharray: 1 3;
     }
+
 </style>
