@@ -63,7 +63,6 @@
           stroke="#ccc"/>
 
     <text dy="380"
-          dx="100"
           style="font-family: monospace">
         <tspan>
             &lt;path d="S
@@ -88,6 +87,9 @@
         </tspan>
         <tspan fill="blue">
             {ex + " " + ey + '"'}
+        </tspan>
+        <tspan>
+            stroke-width="{sw}"
         </tspan>
         <tspan>
             /&gt;
