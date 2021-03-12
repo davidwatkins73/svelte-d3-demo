@@ -12,8 +12,6 @@
     let tx = 960;
     let tension = 0.1;
 
-    const offset = 360
-
     let pathData;
 
     $: paths = Array
@@ -30,8 +28,8 @@
         .scaleLinear()
         .domain([0, 10])
         .range(['#888', '#fafafa']);
-
 </script>
+
 
 <svg viewBox="0 0 {width} {height}"
      width="80%"
@@ -44,10 +42,10 @@
     </g>
 </svg>
 
-
 <h3>Controls</h3>
+
 <label>
-    Source H
+    Source Height
     <input type="range" max="400" bind:value={sh}>
 </label>
 <label>
@@ -55,7 +53,7 @@
     <input type="range" max="400" bind:value={sy}>
 </label>
 <label>
-    Target H
+    Target Height
     <input type="range" max="400" bind:value={th}>
 </label>
 <label>
@@ -68,5 +66,5 @@
 </label>
 <label>
     Tension
-    <input type="range" max="1" step="0.1" bind:value={tension}>
+    <input type="range" max="1" step="0.05" bind:value={tension}>
 </label>
