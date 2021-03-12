@@ -9,6 +9,7 @@
 	import Curves from "./Curves.svelte";
 	import Timeline from "./tl/Timeline.svelte";
 	import TimelineDemo from "./tl/TimelineDemo.svelte";
+	import Flows from "./flows/Flows.svelte";
 </script>
 
 <main>
@@ -17,6 +18,11 @@
 		A collection of simple visualisations created whilst learning about Svelte and D3.
 		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
 	</p>
+
+	<h2>Flows</h2>
+	<div class="viz">
+		<Flows/>
+	</div>
 
 	<h2>Timelines</h2>
 	<div class="viz">

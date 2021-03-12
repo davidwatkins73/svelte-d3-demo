@@ -46,8 +46,6 @@
     function mwoar() {
         timelines = [...timelines, mkData()];
     }
-
-    $: console.log(timeExtent);
 </script>
 
 

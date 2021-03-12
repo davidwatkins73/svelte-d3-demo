@@ -65,7 +65,7 @@
     <text dy="380"
           style="font-family: monospace">
         <tspan>
-            &lt;path d="S
+            &lt;path d="M
         </tspan>
         <tspan fill="purple">
             {sx + ' ' + sy}
