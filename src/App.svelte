@@ -10,6 +10,7 @@
 	import Timeline from "./tl/Timeline.svelte";
 	import TimelineDemo from "./tl/TimelineDemo.svelte";
 	import Flows from "./flows/Flows.svelte";
+	import CurveDemo from "./flows/CurveDemo.svelte";
 </script>
 
 <main>
@@ -22,6 +23,11 @@
 	<h2>Flows</h2>
 	<div class="viz">
 		<Flows/>
+	</div>
+
+	<h2>Curves 2</h2>
+	<div class="viz">
+		<CurveDemo/>
 	</div>
 
 	<h2>Timelines</h2>

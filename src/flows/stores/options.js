@@ -1,3 +1,3 @@
 import {writable} from "svelte/store";
 
-export const selectedFacet = writable("types");
+export const selectedFacet = writable("transport");

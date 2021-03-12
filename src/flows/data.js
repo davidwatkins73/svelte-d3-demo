@@ -78,18 +78,7 @@ function mkFlow(source, target) {
     return {
         source: source.id,
         target: target.id,
-        id: `${source.id}#${target.id}`,
-        facets: [
-            {
-                id: "types",
-                name: "Data Types",
-                values: _.uniq(repeat(Math.ceil(Math.random() * 4), () => randomPick(dataTypes).id))
-            }, {
-                id: "transport",
-                name: "Transport Mechanism",
-                values: [randomPick(transports).id]
-            }
-        ]
+        id: `${source.id}#${target.id}`
     };
 }
 
@@ -112,15 +101,39 @@ export function mkDataSet(config) {
     const sources = mkEndpoints(sourceCount, "s")
     const targets = mkEndpoints(targetCount, "e")
     const app = mkEndpoint("c");
+    const inbound = mkFlows(sources, [app], "in");
+    const outbound = mkFlows([app], targets, "out");
+
+    const dtMappings = _
+        .chain([])
+        .concat(inbound, outbound)
+        .flatMap(d => repeat(
+            Math.ceil(Math.random() * 3),
+            () => ({
+                flowId: d.id,
+                ref: randomPick(dataTypes).id
+            })))
+        .value();
+
+    const transportMappings = _
+        .chain([])
+        .concat(inbound, outbound)
+        .map(d => ([{
+            flowId: d.id,
+            ref: randomPick(transports).id
+        }]))
+        .value();
 
     return {
         sources,
         targets,
         app,
-        inbound: mkFlows(sources, [app], "in"),
-        outbound: mkFlows([app], targets, "out"),
-        dataTypes,
-        transports
+        inbound,
+        outbound,
+        facets: [
+            { id: "type", name: "Data Types", domain: dataTypes, values: dtMappings },
+            { id: "transport", name: "Data Transports", domain: transports, values: transportMappings },
+        ]
     }
 }
 
