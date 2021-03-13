@@ -1,11 +1,22 @@
 import _ from "lodash";
 
 
-const names = [
-    "Trade", "Fix",  "Book", "Settlement", "Risk", "Equity", "Stock", "Asset", "Innovate", "Finance", "Agreement", "Contract", "Fund",
-    "Capture", "Manager", "Explorer", "Commander",
+const names1 =[
     "Apollo", "Zeus", "Hermes", "Juno", "Jove", "Pegasus",
     "Mercury", "Venus", "Mars", "Pluto", "Neptune", "Jupiter", "Saturn",
+    "Maple", "Oak", "Willow",
+    "Jet", "Turbo", "Rapido",
+    "Escher", "Bach", "Godel", "Mozart", "Beethoven", "Chopin"
+
+];
+const names2 = [
+    "Trade", "Fix",  "Book", "Settlement", "Risk", "Equity", "Stock",
+    "Asset", "Innovate", "Finance", "Agreement", "Contract", "Fund",
+    "Linker"
+];
+const names3 = [
+    "Capture", "Manager", "Explorer", "Commander", "Director", "Navigator",
+    "Evaluator", "Calculator", "Reducer", "Compactor", "Mover"
 ];
 
 
@@ -50,8 +61,16 @@ function repeat(times, fn) {
 
 function mkName() {
     const partCount = Math.ceil(Math.random() * 3)
-    return repeat(partCount, (idx) => randomPick(names))
-        .join(" ");
+    switch (partCount) {
+        case 1:
+            return randomPick(names1);
+        case 2:
+            return [randomPick(names2), randomPick(names3)].join(" ");
+        case 3:
+            return [randomPick(names1), randomPick(names2), randomPick(names3)].join(" ");
+        default:
+            return randomPick(names1);
+    }
 }
 
 
@@ -94,19 +113,10 @@ function mkFlows(sources, targets) {
 }
 
 
-export function mkDataSet(config) {
-    const sourceCount = config?.sourceCount || Math.random() * 50 + 1;
-    const targetCount = config?.targetCount || Math.random() * 50 + 1;
-
-    const sources = mkEndpoints(sourceCount, "s")
-    const targets = mkEndpoints(targetCount, "e")
-    const app = mkEndpoint("c");
-    const inbound = mkFlows(sources, [app], "in");
-    const outbound = mkFlows([app], targets, "out");
+function mkFacets(flows = []) {
 
     const dtMappings = _
-        .chain([])
-        .concat(inbound, outbound)
+        .chain(flows)
         .flatMap(d => repeat(
             Math.ceil(Math.random() * 3),
             () => ({
@@ -116,13 +126,41 @@ export function mkDataSet(config) {
         .value();
 
     const transportMappings = _
-        .chain([])
-        .concat(inbound, outbound)
-        .map(d => ([{
+        .chain(flows)
+        .map(d => ({
             flowId: d.id,
             ref: randomPick(transports).id
-        }]))
+        }))
         .value();
+
+    return [
+        { id: "type", values: dtMappings },
+        { id: "transport", values: transportMappings },
+    ]
+}
+
+
+function mkFlowsAndFacets(flows) {
+    return {
+        flows,
+        facets: mkFacets(flows)
+    };
+}
+
+
+export function mkDataSet(config) {
+    const sourceCount = config?.sourceCount || Math.random() * 50 + 1;
+    const targetCount = config?.targetCount || Math.random() * 50 + 1;
+
+    const sources = mkEndpoints(sourceCount, "s")
+    const targets = mkEndpoints(targetCount, "e")
+    const app = mkEndpoint("c");
+
+    const inboundFlows = mkFlows(sources, [app], "in");
+    const outboundFlows = mkFlows([app], targets, "out");
+
+    const inbound = mkFlowsAndFacets(inboundFlows);
+    const outbound = mkFlowsAndFacets(outboundFlows);
 
     return {
         sources,
@@ -130,9 +168,9 @@ export function mkDataSet(config) {
         app,
         inbound,
         outbound,
-        facets: [
-            { id: "type", name: "Data Types", domain: dataTypes, values: dtMappings },
-            { id: "transport", name: "Data Transports", domain: transports, values: transportMappings },
+        facetDomains: [
+            { id: "type", domain: dataTypes, name: "Data Transports"},
+            { id: "transport", domain: transports, name: "Data Types"}
         ]
     }
 }
