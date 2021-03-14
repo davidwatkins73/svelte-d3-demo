@@ -31,8 +31,8 @@
     let width = 1000;
     let height = 1000;
 
-    let midPadding = 0.2;
-    let midBandPadding = 0.3;
+    let midPaddingOuter = 0.2;
+    let midPaddingInner = 0.2;
     let tension = 0.7;
     let inPaths = [];
     let outPaths = [];
@@ -46,7 +46,7 @@
 
 
     $: {
-        const layoutData = layout(inData, outData, facetDomain, midPadding, midBandPadding);
+        const layoutData = layout(inData, outData, facetDomain, midPaddingOuter, midPaddingInner);
 
         inPaths = _.map(
             layoutData.in,
@@ -131,30 +131,46 @@
     </colgroup>
     <tr>
         <td>
-            Mid Padding ({midPadding})
+            Mid Band Outer Padding ({midPaddingOuter})
         </td>
         <td>
-            <input type="range" min="0" max="1" step="0.05" bind:value={midPadding}/>
+            <input type="range"
+                   min="0"
+                   max="10"
+                   step="0.05"
+                   bind:value={midPaddingOuter}/>
         </td>
         <td>
             Tension ({tension})
         </td>
         <td>
-            <input type="range" min="0" max="1" step="0.05" bind:value={tension}/>
+            <input type="range"
+                   min="0"
+                   max="1"
+                   step="0.05"
+                   bind:value={tension}/>
         </td>
     </tr>
     <tr>
         <td>
-            Mid Band Padding ({midBandPadding})
+            Mid Band Inner Padding ({midPaddingInner})
         </td>
         <td>
-            <input type="range" min="0" max="1" step="0.05" bind:value={midBandPadding}/>
+            <input type="range"
+                   min="0"
+                   max="1"
+                   step="0.05"
+                   bind:value={midPaddingInner}/>
         </td>
         <td>
 
         </td>
         <td>
-            <input type="range" min="0" max="1" step="0.05" bind:value={tension}/>
+            <input type="range"
+                   min="0"
+                   max="1"
+                   step="0.05"
+                   bind:value={tension}/>
         </td>
     </tr>
 </table>

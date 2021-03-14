@@ -25,14 +25,15 @@ export function mkPathData(sy, sh, ey, eh, distance, tension) {
 }
 
 
-export function layout(inData, outData, facetDomain, midPadding, midBandPadding= 0.3) {
+export function layout(inData, outData, facetDomain, midPaddingOuter, midPaddingInner= 0.3) {
     const height = 1000;
 
     const midY = d3
         .scaleBand()
         .domain(_.map(facetDomain.domain, "id"))
-        .range([height * midPadding, height - (midPadding * height)])
-        .padding(midBandPadding);
+        .range([0, height])
+        .paddingInner(midPaddingInner)
+        .paddingOuter(midPaddingOuter);
 
     const commonY = d3
         .scaleLinear()
