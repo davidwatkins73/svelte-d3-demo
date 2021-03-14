@@ -1,10 +1,9 @@
 <script>
     import _ from "lodash";
-    import * as d3 from "d3";
 
     import {mkDataSet} from "./data";
     import {selectedFacet} from "./stores/options";
-    import {mkPathData} from "./util";
+    import {layout, mkPathData} from "./util";
 
     function mkStackData(values) {
         return _
@@ -36,59 +35,39 @@
     let tension = 0.7;
     let inPaths = [];
     let outPaths = [];
+    let mids = [];
 
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
     $: facetDomain = _.find(data.facetDomains, {id: $selectedFacet});
     $: inData = mkStackData(inFacet.values);
     $: outData = mkStackData(outFacet.values);
-    $: midY = d3
-        .scaleBand()
-        .domain(_.map(facetDomain.domain, "id"))
-        .range([height * midPadding, height - (midPadding * height)])
-        .padding(midPadding)
+
 
     $: {
-        const commonY = d3
-            .scaleLinear()
-            .range([0, height])
-            .domain([0, Math.max(inData.total, outData.total)]);
-
-        const inY = d3
-            .scaleLinear()
-            .range([
-                height / 2 - (commonY(inData.total) / 2),
-                height / 2 + (commonY(inData.total) / 2)
-            ])
-            .domain([0, inData.total]);
-
-        const outY = d3
-            .scaleLinear()
-            .range([
-                height / 2 - (commonY(outData.total) / 2),
-                height / 2 + (commonY(outData.total) / 2)
-            ])
-            .domain([0, outData.total]);
+        const layoutData = layout(inData, outData, facetDomain, midPadding);
 
         inPaths = _.map(
-            inData.values,
+            layoutData.in,
             d => mkPathData(
-                inY(d.y),
-                inY(d.y + d.h) - inY(d.y),
-                midY(d.k),
-                midY.bandwidth(),
+                d.sy,
+                d.sh,
+                d.ey,
+                d.eh,
                 width / 3,
                 tension));
 
         outPaths = _.map(
-            outData.values,
+            layoutData.out,
             d => mkPathData(
-                midY(d.k),
-                midY.bandwidth(),
-                outY(d.y),
-                outY(d.y + d.h) - outY(d.y),
+                d.sy,
+                d.sh,
+                d.ey,
+                d.eh,
                 width / 3,
                 tension));
+
+        mids = layoutData.mid
     }
 
 
@@ -125,20 +104,19 @@
                   style=""/>
         {/each}
     </g>
-    <g transform="translate({width / 2} 0)">
-        {#each facetDomain.domain as domainItem, idx}
+    <g transform="translate({width /2} 0)">
+        {#each mids as mid}
             <rect x={width / 3 - width / 2}
-                  y={midY(domainItem.id)}
+                  y={mid.y}
                   width={width/3}
-                  height={midY.bandwidth()}
+                  height={mid.h}
                   stroke="#ccc"
                   fill="#eee"/>
-            <text dy={midY(domainItem.id) + midY.bandwidth() * 0.5 + 6 }
+            <text dy={mid.y + mid.h * 0.5 + 6 }
                   text-anchor="middle">
-                {domainItem.name}
+                {mid.data.name}
             </text>
         {/each}
-
     </g>
 </svg>
 
