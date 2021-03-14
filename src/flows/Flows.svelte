@@ -32,6 +32,7 @@
     let height = 1000;
 
     let midPadding = 0.2;
+    let midBandPadding = 0.3;
     let tension = 0.7;
     let inPaths = [];
     let outPaths = [];
@@ -45,7 +46,7 @@
 
 
     $: {
-        const layoutData = layout(inData, outData, facetDomain, midPadding);
+        const layoutData = layout(inData, outData, facetDomain, midPadding, midBandPadding);
 
         inPaths = _.map(
             layoutData.in,
@@ -144,10 +145,10 @@
     </tr>
     <tr>
         <td>
-            Mid Padding ({midPadding})
+            Mid Band Padding ({midBandPadding})
         </td>
         <td>
-            <input type="range" min="0" max="1" step="0.05" bind:value={midPadding}/>
+            <input type="range" min="0" max="1" step="0.05" bind:value={midBandPadding}/>
         </td>
         <td>
 
