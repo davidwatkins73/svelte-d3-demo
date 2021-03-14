@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 /**
  * Create a sankey-like arc, except the starting width and
  * ending width can differ.
@@ -19,4 +21,48 @@ export function mkPathData(sy, sh, ey, eh, distance, tension) {
              l 0 ${end.h}
              C ${midA} ${end.y + end.h}, ${midB} ${start.y + start.h}, ${start.x} ${start.y + start.h}
              Z`;
+}
+
+
+export function layout(inData, outData) {
+    const commonY = d3
+        .scaleLinear()
+        .range([0, 1])
+        .domain([0, Math.max(inData.total, outData.total)]);
+
+    const inY = d3
+        .scaleLinear()
+        .range([
+            0.5 - (commonY(inData.total) / 2),
+            0.5 + (commonY(inData.total) / 2)
+        ])
+        .domain([0, inData.total]);
+
+    const outY = d3
+        .scaleLinear()
+        .range([
+            0.5 - (commonY(outData.total) / 2),
+            0.5 + (commonY(outData.total) / 2)
+        ])
+        .domain([0, outData.total]);
+
+
+    return {
+        in: _.map(
+            inData.values,
+            d => ({
+                sy: inY(d.y),
+                sh: inY(d.y + d.h) - inY(d.y),
+                ey: midY(d.k),
+                eh: midY.bandwidth()
+            })),
+        out: _.map(
+            outData.values,
+            d => ({
+                sy: midY(d.k),
+                sh: midY.bandwidth(),
+                ey: outY(d.y),
+                eh: outY(d.y + d.h) - outY(d.y)
+            }))
+    };
 }
