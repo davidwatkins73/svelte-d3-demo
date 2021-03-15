@@ -6,7 +6,7 @@
     import {selectedFacet, history} from "./stores/options";
     import {layout, mkPathData, mkStackData} from "./util";
 
-    export let data = mkDataSet({sourceCount: 500, targetCount: 150});
+    export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
     let el;
 
@@ -15,6 +15,7 @@
 
     let midPaddingOuter = 3.5;
     let midPaddingInner = 0.2;
+    let endpointPadding = 12;
     let tension = 0.7;
     let inPaths = [];
     let outPaths = [];
@@ -53,8 +54,10 @@
             inData,
             outData,
             activeDomainItems,
+            height,
             midPaddingOuter,
-            midPaddingInner);
+            midPaddingInner,
+            endpointPadding);
 
     $: mids = layoutData.mid;
 
@@ -108,14 +111,16 @@
 <svg viewBox="0 0 {width} {height}"
      width="70%"
      bind:this={el}
-     style="border: 1px solid red">
-    <g transform="translate(0 0)" class="inbound">
+     style="border: 1px solid #eee">
+    <g transform="translate(0 0)"
+       class="inbound">
         {#each inPaths as pathData, idx}
             <path d={pathData}
                   class="flow in-flow"/>
         {/each}
     </g>
-    <g transform="translate({width / 3 * 2} 0)" class="outbound">
+    <g transform="translate({width / 3 * 2} 0)"
+       class="outbound">
         {#each outPaths as pathData, idx}
             <path d={pathData}
                   class="flow out-flow"/>
@@ -196,6 +201,18 @@
             </ul>
         </td>
     </tr>
+    <tr>
+        <td>Endpoint Padding ({endpointPadding})</td>
+        <td><input type="range" min="0" max="100" bind:value={endpointPadding}/></td>
+        <td>Height ({height})</td>
+        <td><input type="range" min="0" max="2000" bind:value={height}/></td>
+    </tr>
+    <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>Width ({width})</td>
+        <td><input type="range" min="0" max="2000" bind:value={width}/></td>
+    </tr>
 </table>
 
 
@@ -205,13 +222,15 @@
     }
 
     .out-flow {
-        fill: #fdde97;
-        stroke: #f6c50b;
+        fill: #baf4f6;
+        stroke: #aaa;
+        /*fill: #fdde97;*/
+        /*stroke: #f6c50b;*/
     }
 
     .in-flow {
-        fill: #bdf8bd;
-        stroke: #08c608;
+        fill: #baf4f6;
+        stroke: #aaa;
     }
 
     .history {
