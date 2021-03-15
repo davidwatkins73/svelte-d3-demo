@@ -3,8 +3,8 @@
     import * as d3 from "d3";
 
     import {mkDataSet} from "./data";
-    import {selectedFacet} from "./stores/options";
-    import {layout, mkPathData, mkStackData, mkStackData2} from "./util";
+    import {selectedFacet, history} from "./stores/options";
+    import {layout, mkPathData, mkStackData} from "./util";
 
     export let data = mkDataSet({sourceCount: 500, targetCount: 150});
 
@@ -20,9 +20,6 @@
     let outPaths = [];
     let mids = [];
 
-    let inData = [];
-    let outData = [];
-
     let activeDomainItems = [];
 
     let domainTree = null;
@@ -30,7 +27,7 @@
 
 
     $: {
-        const root = {id: -13, name: "Fake Root"};
+        const root = {id: -13, name: "Root"};
         const domain = _.map(
             facetDomain.values,
             d => Object.assign(
@@ -49,14 +46,10 @@
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
     $: facetDomain = _.find(data.facetDomains, {id: $selectedFacet});
-    $: inData = mkStackData2(inFacet.values, activeDomainItems);
-    $: outData = mkStackData2(outFacet.values, activeDomainItems);
-    //$: inData = mkStackData(inFacet.values);
-    // $: outData = mkStackData(outFacet.values);
+    $: inData = mkStackData(inFacet.values, activeDomainItems);
+    $: outData = mkStackData(outFacet.values, activeDomainItems);
 
-
-    $: {
-        const layoutData = layout(
+    $: layoutData = layout(
             inData,
             outData,
             facetDomain,
@@ -64,7 +57,9 @@
             midPaddingInner,
             activeDomainItems);
 
-        inPaths = _.map(
+    $: mids = layoutData.mid;
+
+    $: inPaths = _.map(
             layoutData.in,
             d => mkPathData(
                 d.sy,
@@ -74,7 +69,7 @@
                 width / 3,
                 tension));
 
-        outPaths = _.map(
+    $: outPaths = _.map(
             layoutData.out,
             d => mkPathData(
                 d.sy,
@@ -83,9 +78,6 @@
                 d.eh,
                 width / 3,
                 tension));
-
-        mids = layoutData.mid
-    }
 
 
     $: console.log({
@@ -99,6 +91,17 @@
         inPaths
     });
 
+
+    function drillIn(mid) {
+        if (_.isEmpty(mid.data.children)) return;
+        history.update(xs => [...xs, activeRoot]);
+        activeRoot = mid.data
+    }
+
+    function rewind(mid) {
+        history.update(xs => _.takeWhile(xs, x => x !== mid))
+        activeRoot = mid;
+    }
 </script>
 
 <h1>Flows</h1>
@@ -127,7 +130,7 @@
                   height={mid.h}
                   stroke="#ccc"
                   fill="#eee"
-                  on:click={() => activeRoot = mid.data}/>
+                  on:click={() => drillIn(mid)}/>
             <text dy={mid.y + mid.h * 0.5 + 6 }
                   text-anchor="middle">
                 {mid.data.data.name}
@@ -179,14 +182,19 @@
                    bind:value={midPaddingInner}/>
         </td>
         <td>
-
+            History
         </td>
         <td>
-            <input type="range"
-                   min="0"
-                   max="1"
-                   step="0.05"
-                   bind:value={tension}/>
+            <ul class="history">
+                {#each $history as h}
+                    <li>
+                        <button on:click={() => rewind(h)}
+                                class="link">
+                            {h.data.name}
+                        </button>
+                    </li>
+                {/each}
+            </ul>
         </td>
     </tr>
 </table>
@@ -206,4 +214,9 @@
         fill: #bdf8bd;
         stroke: #08c608;
     }
+
+    .history {
+        list-style: none;
+    }
+
 </style>

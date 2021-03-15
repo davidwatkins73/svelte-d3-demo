@@ -26,7 +26,7 @@ export function mkPathData(sy, sh, ey, eh, distance, tension) {
 }
 
 
-export function mkStackData2(values, activeDomainItems) {
+export function mkStackData(values, activeDomainItems) {
     const idToBucketMap = _.reduce(
         activeDomainItems,
         (acc, d) => {
@@ -40,26 +40,6 @@ export function mkStackData2(values, activeDomainItems) {
         .map(d => idToBucketMap[d.ref]) // domain id
         .reject(d => _.isNil(d))
         .countBy(d => d)
-        .reduce(
-            (acc, v, k) => {
-                const d = {
-                    k,
-                    y: acc.total,
-                    h: v
-                };
-                acc.values.push(d);
-                acc.total += v;
-                return acc;
-            },
-            {total: 0, values: []})
-        .value();
-}
-
-
-export function mkStackData(values) {
-    return _
-        .chain(values)
-        .countBy(d => d.ref)
         .reduce(
             (acc, v, k) => {
                 const d = {
