@@ -26,6 +26,36 @@ export function mkPathData(sy, sh, ey, eh, distance, tension) {
 }
 
 
+export function mkStackData2(values, activeDomainItems) {
+    const idToBucketMap = _.reduce(
+        activeDomainItems,
+        (acc, d) => {
+            d.rollups.forEach(r => acc[r] = d.id);
+            return acc;
+        },
+        {});
+
+    return _
+        .chain(values)
+        .map(d => idToBucketMap[d.ref]) // domain id
+        .reject(d => _.isNil(d))
+        .countBy(d => d)
+        .reduce(
+            (acc, v, k) => {
+                const d = {
+                    k,
+                    y: acc.total,
+                    h: v
+                };
+                acc.values.push(d);
+                acc.total += v;
+                return acc;
+            },
+            {total: 0, values: []})
+        .value();
+}
+
+
 export function mkStackData(values) {
     return _
         .chain(values)
@@ -50,12 +80,15 @@ export function layout(inData,
                        outData,
                        facetDomain,
                        midPaddingOuter = 0.3,
-                       midPaddingInner= 0.3) {
+                       midPaddingInner= 0.3,
+                       activeDomainItems) {
+
+    console.log({facetDomain, activeDomainItems})
     const height = 1000;
 
     const midY = d3
         .scaleBand()
-        .domain(_.map(facetDomain.domain, d => d.id))
+        .domain(_.map(activeDomainItems, d => d.id))
         .range([0, height])
         .paddingInner(midPaddingInner)
         .paddingOuter(midPaddingOuter);
@@ -101,7 +134,7 @@ export function layout(inData,
                 eh: outY(d.y + d.h) - outY(d.y)
             })),
         mid: _.map(
-            facetDomain.domain,
+            activeDomainItems,
             d => ({
                 y: midY(d.id),
                 data: d,

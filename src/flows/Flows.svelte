@@ -1,11 +1,12 @@
 <script>
     import _ from "lodash";
+    import * as d3 from "d3";
 
     import {mkDataSet} from "./data";
     import {selectedFacet} from "./stores/options";
-    import {layout, mkPathData, mkStackData} from "./util";
+    import {layout, mkPathData, mkStackData, mkStackData2} from "./util";
 
-    export let data = mkDataSet({sourceCount: 50, targetCount: 400});
+    export let data = mkDataSet({sourceCount: 500, targetCount: 150});
 
     let el;
 
@@ -19,11 +20,39 @@
     let outPaths = [];
     let mids = [];
 
+    let inData = [];
+    let outData = [];
+
+    let activeDomainItems = [];
+
+    let domainTree = null;
+    let activeRoot = null;
+
+
+    $: {
+        const root = {id: -13, name: "Fake Root"};
+        const domain = _.map(
+            facetDomain.values,
+            d => Object.assign(
+                {},
+                d,
+                {parentId: d.parentId ? d.parentId : root.id}));
+
+        domainTree = d3.stratify()(_.concat([root], domain));
+        activeRoot = domainTree;
+    }
+
+    $: activeDomainItems = _.map(
+            activeRoot.children,
+            d => ({...d, rollups: _.map(d.descendants(), c => c.id)}));
+
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
     $: facetDomain = _.find(data.facetDomains, {id: $selectedFacet});
-    $: inData = mkStackData(inFacet.values);
-    $: outData = mkStackData(outFacet.values);
+    $: inData = mkStackData2(inFacet.values, activeDomainItems);
+    $: outData = mkStackData2(outFacet.values, activeDomainItems);
+    //$: inData = mkStackData(inFacet.values);
+    // $: outData = mkStackData(outFacet.values);
 
 
     $: {
@@ -32,7 +61,8 @@
             outData,
             facetDomain,
             midPaddingOuter,
-            midPaddingInner);
+            midPaddingInner,
+            activeDomainItems);
 
         inPaths = _.map(
             layoutData.in,
@@ -96,10 +126,12 @@
                   width={width / 3}
                   height={mid.h}
                   stroke="#ccc"
-                  fill="#eee"/>
+                  fill="#eee"
+                  on:click={() => activeRoot = mid.data}/>
             <text dy={mid.y + mid.h * 0.5 + 6 }
                   text-anchor="middle">
-                {mid.data.name}
+                {mid.data.data.name}
+                {mid.data.children ? "+" : "-" }
             </text>
         {/each}
     </g>

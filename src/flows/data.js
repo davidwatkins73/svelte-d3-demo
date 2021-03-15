@@ -23,7 +23,7 @@ const names3 = [
 const dataTypes = [
     {"name":"Book Data","id":1000, "parentId":null},
     {"name":"Counterparty etc.","id":2000, "parentId":null},
-        {"name":"Institutional","id":2100, "parentId":2100},
+        {"name":"Institutional","id":2100, "parentId":2000},
         {"name":"Individual","id":2200, "parentId":2100},
     {"name":"Pricing Data","id":3000, "parentId":null},
         {name: "Commodities", id: 3100, parentId: 3000 },
@@ -169,8 +169,8 @@ export function mkDataSet(config) {
         inbound,
         outbound,
         facetDomains: [
-            { id: "type", domain: dataTypes, name: "Data Transports"},
-            { id: "transport", domain: transports, name: "Data Types"}
+            { id: "type", values: dataTypes, name: "Data Transports"},
+            { id: "transport", values: transports, name: "Data Types"}
         ]
     }
 }
