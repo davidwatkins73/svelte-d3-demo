@@ -18,19 +18,44 @@ export function mkPathData(sy, sh, ey, eh, distance, tension) {
     const end = {x: distance, y: ey, h: eh};
     const midA = start.x + (end.x - start.x) * tension;
     const midB = start.x + (end.x - start.x) * (1 - tension);
-    return `M ${start.x} ${start.y} C ${midB} ${start.y}, ${midA} ${end.y}, ${end.x} ${end.y}
-             l 0 ${end.h}
-             C ${midA} ${end.y + end.h}, ${midB} ${start.y + start.h}, ${start.x} ${start.y + start.h}
-             Z`;
+    return `M ${start.x} ${start.y} 
+            C ${midB} ${start.y}, ${midA} ${end.y}, ${end.x} ${end.y}
+            l 0 ${end.h}
+            C ${midA} ${end.y + end.h}, ${midB} ${start.y + start.h}, ${start.x} ${start.y + start.h}
+            Z`;
 }
 
 
-export function layout(inData, outData, facetDomain, midPaddingOuter, midPaddingInner= 0.3) {
+export function mkStackData(values) {
+    return _
+        .chain(values)
+        .countBy(d => d.ref)
+        .reduce(
+            (acc, v, k) => {
+                const d = {
+                    k,
+                    y: acc.total,
+                    h: v
+                };
+                acc.values.push(d);
+                acc.total += v;
+                return acc;
+            },
+            {total: 0, values: []})
+        .value();
+}
+
+
+export function layout(inData,
+                       outData,
+                       facetDomain,
+                       midPaddingOuter = 0.3,
+                       midPaddingInner= 0.3) {
     const height = 1000;
 
     const midY = d3
         .scaleBand()
-        .domain(_.map(facetDomain.domain, "id"))
+        .domain(_.map(facetDomain.domain, d => d.id))
         .range([0, height])
         .paddingInner(midPaddingInner)
         .paddingOuter(midPaddingOuter);
@@ -42,19 +67,19 @@ export function layout(inData, outData, facetDomain, midPaddingOuter, midPadding
 
     const inY = d3
         .scaleLinear()
+        .domain([0, inData.total])
         .range([
             height / 2 - (commonY(inData.total) / 2),
             height / 2 + (commonY(inData.total) / 2)
-        ])
-        .domain([0, inData.total]);
+        ]);
 
     const outY = d3
         .scaleLinear()
+        .domain([0, outData.total])
         .range([
             height / 2  - (commonY(outData.total) / 2),
             height / 2  + (commonY(outData.total) / 2)
-        ])
-        .domain([0, outData.total]);
+        ]);
 
 
     return {

@@ -3,35 +3,16 @@
 
     import {mkDataSet} from "./data";
     import {selectedFacet} from "./stores/options";
-    import {layout, mkPathData} from "./util";
+    import {layout, mkPathData, mkStackData} from "./util";
 
-    function mkStackData(values) {
-        return _
-            .chain(values)
-            .countBy(d => d.ref)
-            .reduce(
-                (acc, v, k) => {
-                    const d = {
-                        k,
-                        y: acc.total,
-                        h: v
-                    };
-                    acc.values.push(d);
-                    acc.total += v;
-                    return acc;
-                },
-                {total: 0, values: []})
-            .value();
-    }
-
-    export let data = mkDataSet({sourceCount: 250, targetCount: 100});
+    export let data = mkDataSet({sourceCount: 50, targetCount: 400});
 
     let el;
 
     let width = 1000;
     let height = 1000;
 
-    let midPaddingOuter = 0.2;
+    let midPaddingOuter = 3.5;
     let midPaddingInner = 0.2;
     let tension = 0.7;
     let inPaths = [];
@@ -46,7 +27,12 @@
 
 
     $: {
-        const layoutData = layout(inData, outData, facetDomain, midPaddingOuter, midPaddingInner);
+        const layoutData = layout(
+            inData,
+            outData,
+            facetDomain,
+            midPaddingOuter,
+            midPaddingInner);
 
         inPaths = _.map(
             layoutData.in,
@@ -91,25 +77,23 @@
      width="70%"
      bind:this={el}
      style="border: 1px solid red">
-    <g transform="translate(0 0)">
+    <g transform="translate(0 0)" class="inbound">
         {#each inPaths as pathData, idx}
             <path d={pathData}
-                  class="flow in-flow"
-                  style="opacity: 0.4"/>
+                  class="flow in-flow"/>
         {/each}
     </g>
-    <g transform="translate({width / 3 * 2} 0)">
+    <g transform="translate({width / 3 * 2} 0)" class="outbound">
         {#each outPaths as pathData, idx}
             <path d={pathData}
-                  class="flow out-flow"
-                  style=""/>
+                  class="flow out-flow"/>
         {/each}
     </g>
-    <g transform="translate({width /2} 0)">
+    <g transform="translate({width / 2} 0)" class="middle">
         {#each mids as mid}
-            <rect x={width / 3 - width / 2}
+            <rect x={width / 6 * -1}
                   y={mid.y}
-                  width={width/3}
+                  width={width / 3}
                   height={mid.h}
                   stroke="#ccc"
                   fill="#eee"/>
