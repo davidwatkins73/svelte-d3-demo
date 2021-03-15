@@ -58,17 +58,15 @@ export function mkStackData(values, activeDomainItems) {
 
 export function layout(inData,
                        outData,
-                       facetDomain,
+                       domainItems,
                        midPaddingOuter = 0.3,
-                       midPaddingInner= 0.3,
-                       activeDomainItems) {
+                       midPaddingInner = 0.3) {
 
-    console.log({facetDomain, activeDomainItems})
     const height = 1000;
 
     const midY = d3
         .scaleBand()
-        .domain(_.map(activeDomainItems, d => d.id))
+        .domain(_.map(domainItems, d => d.id))
         .range([0, height])
         .paddingInner(midPaddingInner)
         .paddingOuter(midPaddingOuter);
@@ -114,7 +112,7 @@ export function layout(inData,
                 eh: outY(d.y + d.h) - outY(d.y)
             })),
         mid: _.map(
-            activeDomainItems,
+            domainItems,
             d => ({
                 y: midY(d.id),
                 data: d,

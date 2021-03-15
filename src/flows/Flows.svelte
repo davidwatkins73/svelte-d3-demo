@@ -52,10 +52,9 @@
     $: layoutData = layout(
             inData,
             outData,
-            facetDomain,
+            activeDomainItems,
             midPaddingOuter,
-            midPaddingInner,
-            activeDomainItems);
+            midPaddingInner);
 
     $: mids = layoutData.mid;
 
