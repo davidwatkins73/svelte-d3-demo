@@ -5,6 +5,7 @@
     import {mkDataSet} from "./data";
     import {selectedFacet, history} from "./stores/options";
     import {layout, mkPathData, mkStackData} from "./util";
+    import Defs from "./Defs.svelte";
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
@@ -41,8 +42,8 @@
     }
 
     $: activeDomainItems = _.map(
-            activeRoot.children,
-            d => ({...d, rollups: _.map(d.descendants(), c => c.id)}));
+        activeRoot.children,
+        d => ({...d, rollups: _.map(d.descendants(), c => c.id)}));
 
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
@@ -51,35 +52,35 @@
     $: outData = mkStackData(outFacet.values, activeDomainItems);
 
     $: layoutData = layout(
-            inData,
-            outData,
-            activeDomainItems,
-            height,
-            midPaddingOuter,
-            midPaddingInner,
-            endpointPadding);
+        inData,
+        outData,
+        activeDomainItems,
+        height,
+        midPaddingOuter,
+        midPaddingInner,
+        endpointPadding);
 
     $: mids = layoutData.mid;
 
     $: inPaths = _.map(
-            layoutData.in,
-            d => mkPathData(
-                d.sy,
-                d.sh,
-                d.ey,
-                d.eh,
-                width / 3,
-                tension));
+        layoutData.in,
+        d => mkPathData(
+            d.sy,
+            d.sh,
+            d.ey,
+            d.eh,
+            width / 3,
+            tension));
 
     $: outPaths = _.map(
-            layoutData.out,
-            d => mkPathData(
-                d.sy,
-                d.sh,
-                d.ey,
-                d.eh,
-                width / 3,
-                tension));
+        layoutData.out,
+        d => mkPathData(
+            d.sy,
+            d.sh,
+            d.ey,
+            d.eh,
+            width / 3,
+            tension));
 
 
     $: console.log({
@@ -112,10 +113,12 @@
      width="70%"
      bind:this={el}
      style="border: 1px solid #eee">
+    <Defs/>
     <g transform="translate(0 0)"
        class="inbound">
         {#each inPaths as pathData, idx}
             <path d={pathData}
+                  fill="url(#gradient-in)"
                   class="flow in-flow"/>
         {/each}
     </g>
@@ -123,6 +126,7 @@
        class="outbound">
         {#each outPaths as pathData, idx}
             <path d={pathData}
+                  fill="url(#gradient-out)"
                   class="flow out-flow"/>
         {/each}
     </g>
@@ -133,7 +137,7 @@
                   width={width / 3}
                   height={mid.h}
                   stroke="#ccc"
-                  fill="#eee"
+                  fill="#fafafa"
                   on:click={() => drillIn(mid)}/>
             <text dy={mid.y + mid.h * 0.5 + 6 }
                   text-anchor="middle">
@@ -222,14 +226,14 @@
     }
 
     .out-flow {
-        fill: #baf4f6;
+        /*fill: #baf4f6;*/
         stroke: #aaa;
         /*fill: #fdde97;*/
         /*stroke: #f6c50b;*/
     }
 
     .in-flow {
-        fill: #baf4f6;
+        /*fill: #baf4f6;*/
         stroke: #aaa;
     }
 
