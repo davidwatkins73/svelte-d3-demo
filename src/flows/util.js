@@ -64,14 +64,8 @@ export function layout(inData,
                        midPaddingInner = 0.3,
                        endpointPadding = 5) {
 
-    const midY = d3
-        .scaleBand()
-        .domain(_.map(domainItems, d => d.id))
-        .range([0, height])
-        .paddingInner(midPaddingInner)
-        .paddingOuter(midPaddingOuter);
+    const commonHeight = height - ((domainItems.length - 1) * endpointPadding);
 
-    let commonHeight = height - ((domainItems.length - 1) * endpointPadding);
     const commonY = d3
         .scaleLinear()
         .range([0, commonHeight])
@@ -93,6 +87,12 @@ export function layout(inData,
             commonHeight / 2  + (commonY(outData.total) / 2)
         ]);
 
+    const midY = d3
+        .scaleBand()
+        .domain(_.map(domainItems, d => d.id))
+        .range([0, height])
+        .paddingInner(midPaddingInner)
+        .paddingOuter(midPaddingOuter);
 
     return {
         in: _.map(
