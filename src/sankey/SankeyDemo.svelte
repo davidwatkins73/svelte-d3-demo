@@ -21,8 +21,6 @@
         }
     }
 
-    toggleAnimation();
-
     onDestroy(() => interval && clearInterval(interval));
 
 </script>
