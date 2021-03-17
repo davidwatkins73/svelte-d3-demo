@@ -4,9 +4,11 @@
 
     import {mkDataSet} from "./data";
     import {selectedFacet, history} from "./stores/options";
-    import {mkArcs, mkStackData, myLayout} from "./util";
+    import {mkStackData} from "./util";
     import Defs from "./Defs.svelte";
     import IndicatorBar from "./IndicatorBar.svelte";
+    import {arc, mkArcs} from "./arcs";
+    import {flowLayout} from "./flowLayout";
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
@@ -32,11 +34,15 @@
 
     let el;
 
-    $: layoutFn = myLayout()
+    $: layoutFn = flowLayout()
         .height(height)
         .midPaddingOuter(midPaddingOuter)
         .midPaddingInner(midPaddingInner)
         .endpointPadding(endpointPadding);
+
+    $: arcFn = arc()
+        .width(width / 3 - indicatorBarWidth)
+        .tension(tension);
 
     $: {
         const root = {id: -13, name: "Root"};
@@ -68,8 +74,8 @@
     $: layoutData = layoutFn(inData, outData, activeDomainItems);
 
     $: mids = layoutData.mid;
-    $: inArcs = mkArcs(layoutData.in, width / 3 - indicatorBarWidth, tension);
-    $: outArcs = mkArcs(layoutData.out, width / 3 - indicatorBarWidth, tension);
+    $: inArcs = mkArcs(layoutData.in, arcFn);
+    $: outArcs = mkArcs(layoutData.out, arcFn);
 
     /*
     $: console.log({
