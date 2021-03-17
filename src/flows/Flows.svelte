@@ -34,10 +34,10 @@
         const root = {id: -13, name: "Root"};
         const domain = _.map(
             facetDomain.values,
-            d => Object.assign(
-                {},
-                d,
-                {parentId: d.parentId ? d.parentId : root.id}));
+            d => ({
+                ...d,
+                parentId: d.parentId ? d.parentId : root.id
+            }));
 
         domainTree = d3.stratify()(_.concat([root], domain));
         activeRoot = domainTree;
@@ -96,6 +96,7 @@
             return {...d, path};
         });
 
+    /*
     $: console.log({
         data,
         inFacet,
@@ -107,7 +108,7 @@
         inArcs,
         outArcs
     });
-
+    */
 
     function drillIn(mid) {
         if (_.isEmpty(mid.data.children)) return;
