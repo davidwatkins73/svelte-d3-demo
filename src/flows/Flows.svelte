@@ -9,24 +9,26 @@
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
-    let el;
 
     let width = 1000;
     let height = 1000;
 
+    // these control the ui layout
     let midPaddingOuter = 3.5;
     let midPaddingInner = 0.2;
     let endpointPadding = 12;
+    let indicatorBarWidth = 10;
     let tension = 0.7;
-    let inPaths = [];
-    let outPaths = [];
+
+    let inArcs = [];
+    let outArcs = [];
     let mids = [];
 
     let activeDomainItems = [];
-
     let domainTree = null;
     let activeRoot = null;
 
+    let el;
 
     $: {
         const root = {id: -13, name: "Root"};
@@ -62,26 +64,33 @@
 
     $: mids = layoutData.mid;
 
-    $: inPaths = _.map(
+    $: inArcs = _.map(
         layoutData.in,
-        d => mkPathData(
-            d.sy,
-            d.sh,
-            d.ey,
-            d.eh,
-            width / 3,
-            tension));
+        d => {
+            const path = mkPathData(
+                d.sy,
+                d.sh,
+                d.ey,
+                d.eh,
+                width / 3 - indicatorBarWidth,
+                tension);
 
-    $: outPaths = _.map(
+            return Object.assign({}, d, {path});
+        });
+
+    $: outArcs = _.map(
         layoutData.out,
-        d => mkPathData(
-            d.sy,
-            d.sh,
-            d.ey,
-            d.eh,
-            width / 3,
-            tension));
+        d => {
+            const path = mkPathData(
+                d.sy,
+                d.sh,
+                d.ey,
+                d.eh,
+                width / 3 - indicatorBarWidth,
+                tension);
 
+            return Object.assign({}, d, {path});
+        });
 
     $: console.log({
         data,
@@ -91,7 +100,8 @@
         selectedFacet: $selectedFacet,
         inData,
         outData,
-        inPaths
+        inArcs,
+        outArcs
     });
 
 
@@ -116,18 +126,31 @@
     <Defs/>
     <g transform="translate(0 0)"
        class="inbound">
-        {#each inPaths as pathData, idx}
-            <path d={pathData}
+        {#each inArcs as d}
+            <path d={d.path}
+                  transform="translate({indicatorBarWidth} 0)"
                   fill="url(#gradient-in)"
                   class="flow in-flow"/>
+            <rect x={0}
+                  y={d.sy}
+                  width={indicatorBarWidth}
+                  stroke="#aaa"
+                  height={d.sh}
+                  fill="#ff1320"/>
         {/each}
     </g>
     <g transform="translate({width / 3 * 2} 0)"
        class="outbound">
-        {#each outPaths as pathData, idx}
-            <path d={pathData}
+        {#each outArcs as d, idx}
+            <path d={d.path}
                   fill="url(#gradient-out)"
                   class="flow out-flow"/>
+            <rect x={(width / 3) - indicatorBarWidth}
+                  y={d.ey}
+                  width={indicatorBarWidth}
+                  height={d.eh}
+                  stroke="#aaa"
+                  fill="#ff1320"/>
         {/each}
     </g>
     <g transform="translate({width / 2} 0)" class="middle">
@@ -212,8 +235,8 @@
         <td><input type="range" min="0" max="2000" bind:value={height}/></td>
     </tr>
     <tr>
-        <td>-</td>
-        <td>-</td>
+        <td>Indicator Bar Width ({indicatorBarWidth})</td>
+        <td><input type="range" min="0" max="100" bind:value={indicatorBarWidth}></td>
         <td>Width ({width})</td>
         <td><input type="range" min="0" max="2000" bind:value={width}/></td>
     </tr>
