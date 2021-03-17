@@ -16,7 +16,7 @@
 
     // these control the ui layout
     let midPaddingOuter = 3.5;
-    let midPaddingInner = 0.2;
+    let midPaddingInner = 0.5;
     let endpointPadding = 12;
     let indicatorBarWidth = 12;
     let tension = 0.7;
@@ -127,7 +127,7 @@
 <h1>Flows</h1>
 
 <svg viewBox="0 0 {width} {height}"
-     width="70%"
+     width="80%"
      bind:this={el}
      style="border: 1px solid #eee">
     <Defs/>
