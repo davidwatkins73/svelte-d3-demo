@@ -18,7 +18,7 @@
     let midPaddingOuter = 3.5;
     let midPaddingInner = 0.2;
     let endpointPadding = 12;
-    let indicatorBarWidth = 10;
+    let indicatorBarWidth = 12;
     let tension = 0.7;
 
     let inArcs = [];

@@ -15,13 +15,13 @@
 
 <rect y="0"
       {width}
-      height={y(1)}
-      fill="#ffaca7"/>
-<rect y={y(1)}
+      height={y(2)}
+      fill="#c4ffca"/>
+<rect y={y(2)}
+      {width}
+      height={y(5)}
+      fill="#ffd9ab"/>
+<rect y={y(7)}
       {width}
       height={y(3)}
-      fill="#ffd9ab"/>
-<rect y={y(4)}
-      {width}
-      height={y(6)}
-      fill="#c4ffca"/>
+      fill="#ffaca7"/>
