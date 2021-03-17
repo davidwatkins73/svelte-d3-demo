@@ -4,11 +4,12 @@
 
     import {mkDataSet} from "./data";
     import {selectedFacet, history} from "./stores/options";
-    import {layout, mkPathData, mkStackData} from "./util";
+    import {mkArcs, mkStackData, myLayout} from "./util";
     import Defs from "./Defs.svelte";
     import IndicatorBar from "./IndicatorBar.svelte";
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
+
 
 
     let width = 1000;
@@ -30,6 +31,12 @@
     let activeRoot = null;
 
     let el;
+
+    $: layoutFn = myLayout()
+        .height(height)
+        .midPaddingOuter(midPaddingOuter)
+        .midPaddingInner(midPaddingInner)
+        .endpointPadding(endpointPadding);
 
     $: {
         const root = {id: -13, name: "Root"};
@@ -58,45 +65,11 @@
     $: facetDomain = _.find(data.facetDomains, {id: $selectedFacet});
     $: inData = mkStackData(inFacet.values, activeDomainItems);
     $: outData = mkStackData(outFacet.values, activeDomainItems);
-
-    $: layoutData = layout(
-        inData,
-        outData,
-        activeDomainItems,
-        height,
-        midPaddingOuter,
-        midPaddingInner,
-        endpointPadding);
+    $: layoutData = layoutFn(inData, outData, activeDomainItems);
 
     $: mids = layoutData.mid;
-
-    $: inArcs = _.map(
-        layoutData.in,
-        d => {
-            const path = mkPathData(
-                d.sy,
-                d.sh,
-                d.ey,
-                d.eh,
-                width / 3 - indicatorBarWidth,
-                tension);
-
-            return {...d, path};
-        });
-
-    $: outArcs = _.map(
-        layoutData.out,
-        d => {
-            const path = mkPathData(
-                d.sy,
-                d.sh,
-                d.ey,
-                d.eh,
-                width / 3 - indicatorBarWidth,
-                tension);
-
-            return {...d, path};
-        });
+    $: inArcs = mkArcs(layoutData.in, width / 3 - indicatorBarWidth, tension);
+    $: outArcs = mkArcs(layoutData.out, width / 3 - indicatorBarWidth, tension);
 
     /*
     $: console.log({
