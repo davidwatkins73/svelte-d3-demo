@@ -141,7 +141,7 @@
                   width={indicatorBarWidth}
                   stroke="#aaa"
                   height={d.sh}
-                  fill="#ff1320"/>
+                  fill="#ffdde9"/>
         {/each}
     </g>
     <g transform="translate({width / 3 * 2} 0)"
@@ -155,7 +155,7 @@
                   width={indicatorBarWidth}
                   height={d.eh}
                   stroke="#aaa"
-                  fill="#ff1320"/>
+                  fill="#ffdde9"/>
         {/each}
     </g>
     <g transform="translate({width / 2} 0)" class="middle">
