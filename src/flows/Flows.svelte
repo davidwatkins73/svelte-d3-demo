@@ -45,7 +45,11 @@
 
     $: activeDomainItems = _.map(
         activeRoot.children,
-        d => ({...d, rollups: _.map(d.descendants(), c => c.id)}));
+        d => ({
+            ...d,
+            rollups: _.map(
+                d.descendants(),
+                c => c.id)}));
 
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
@@ -75,7 +79,7 @@
                 width / 3 - indicatorBarWidth,
                 tension);
 
-            return Object.assign({}, d, {path});
+            return {...d, path};
         });
 
     $: outArcs = _.map(
@@ -89,7 +93,7 @@
                 width / 3 - indicatorBarWidth,
                 tension);
 
-            return Object.assign({}, d, {path});
+            return {...d, path};
         });
 
     $: console.log({
