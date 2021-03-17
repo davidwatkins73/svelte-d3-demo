@@ -10,10 +10,12 @@
     import {arc, mkArcs} from "./arcs";
     import {flowLayout} from "./flowLayout";
 
+
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
+    let el;
 
-
+    // overall dimensions of the chart
     let width = 1000;
     let height = 1000;
 
@@ -24,15 +26,14 @@
     let indicatorBarWidth = 12;
     let tension = 0.7;
 
-    let inArcs = [];
-    let outArcs = [];
-    let mids = [];
 
     let activeDomainItems = [];
     let domainTree = null;
     let activeRoot = null;
 
-    let el;
+    let inArcs = [];
+    let outArcs = [];
+    let mids = [];
 
     $: layoutFn = flowLayout()
         .height(height)
@@ -45,7 +46,7 @@
         .tension(tension);
 
     $: {
-        const root = {id: -13, name: "Root"};
+        const root = {id: -1, name: "Root"};
         const domain = _.map(
             facetDomain.values,
             d => ({

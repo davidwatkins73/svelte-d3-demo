@@ -1,5 +1,5 @@
 <script>
-    import {mkPathData} from "./util";
+    import {mkPathData} from "./arcs";
     import * as d3 from "d3";
 
     let width = 1000;
