@@ -6,6 +6,7 @@
     import {selectedFacet, history} from "./stores/options";
     import {layout, mkPathData, mkStackData} from "./util";
     import Defs from "./Defs.svelte";
+    import IndicatorBar from "./IndicatorBar.svelte";
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
@@ -49,7 +50,8 @@
             ...d,
             rollups: _.map(
                 d.descendants(),
-                c => c.id)}));
+                c => c.id)
+        }));
 
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
@@ -136,12 +138,10 @@
                   transform="translate({indicatorBarWidth} 0)"
                   fill="url(#gradient-in)"
                   class="flow in-flow"/>
-            <rect x={0}
-                  y={d.sy}
-                  width={indicatorBarWidth}
-                  stroke="#aaa"
-                  height={d.sh}
-                  fill="#ffdde9"/>
+            <g transform="translate(0 {d.sy})">
+                <IndicatorBar height={d.sh}
+                              width={indicatorBarWidth}/>
+            </g>
         {/each}
     </g>
     <g transform="translate({width / 3 * 2} 0)"
@@ -150,12 +150,10 @@
             <path d={d.path}
                   fill="url(#gradient-out)"
                   class="flow out-flow"/>
-            <rect x={(width / 3) - indicatorBarWidth}
-                  y={d.ey}
-                  width={indicatorBarWidth}
-                  height={d.eh}
-                  stroke="#aaa"
-                  fill="#ffdde9"/>
+            <g transform="translate({(width / 3) - indicatorBarWidth} {d.ey})">
+                <IndicatorBar height={d.eh}
+                              width={indicatorBarWidth}/>
+            </g>
         {/each}
     </g>
     <g transform="translate({width / 2} 0)" class="middle">
