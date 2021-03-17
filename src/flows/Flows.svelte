@@ -9,7 +9,15 @@
     import IndicatorBar from "./IndicatorBar.svelte";
     import {arc, mkArcs} from "./arcs";
     import {flowLayout} from "./flowLayout";
+    import { tweened } from 'svelte/motion';
+    import { cubicOut } from 'svelte/easing';
 
+    const indicatorBarWidth = tweened(
+        12,
+        {
+            duration: 400,
+            easing: cubicOut
+        });
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
@@ -23,7 +31,6 @@
     let midPaddingOuter = 3.5;
     let midPaddingInner = 0.5;
     let endpointPadding = 12;
-    let indicatorBarWidth = 12;
     let tension = 0.7;
 
 
@@ -42,7 +49,7 @@
         .endpointPadding(endpointPadding);
 
     $: arcFn = arc()
-        .width(width / 3 - indicatorBarWidth)
+        .width(width / 3 - $indicatorBarWidth)
         .tension(tension);
 
     $: {
@@ -115,12 +122,12 @@
        class="inbound">
         {#each inArcs as d}
             <path d={d.path}
-                  transform="translate({indicatorBarWidth} 0)"
+                  transform="translate({$indicatorBarWidth} 0)"
                   fill="url(#gradient-in)"
                   class="flow in-flow"/>
             <g transform="translate(0 {d.sy})">
                 <IndicatorBar height={d.sh}
-                              width={indicatorBarWidth}/>
+                              width={$indicatorBarWidth}/>
             </g>
         {/each}
     </g>
@@ -130,9 +137,9 @@
             <path d={d.path}
                   fill="url(#gradient-out)"
                   class="flow out-flow"/>
-            <g transform="translate({(width / 3) - indicatorBarWidth} {d.ey})">
+            <g transform="translate({(width / 3) - $indicatorBarWidth} {d.ey})">
                 <IndicatorBar height={d.eh}
-                              width={indicatorBarWidth}/>
+                              width={$indicatorBarWidth}/>
             </g>
         {/each}
     </g>
@@ -218,8 +225,11 @@
         <td><input type="range" min="0" max="2000" bind:value={height}/></td>
     </tr>
     <tr>
-        <td>Indicator Bar Width ({indicatorBarWidth})</td>
-        <td><input type="range" min="0" max="100" bind:value={indicatorBarWidth}></td>
+        <td>Indicator Bar Width ({Math.round($indicatorBarWidth)})</td>
+        <td>
+<!--            <input type="range" min="0" max="100" bind:value={indicatorBarWidth}>-->
+            <button on:click={() => indicatorBarWidth.set($indicatorBarWidth === 12 ? 100 : 12)}>Bounce</button>
+        </td>
         <td>Width ({width})</td>
         <td><input type="range" min="0" max="2000" bind:value={width}/></td>
     </tr>
