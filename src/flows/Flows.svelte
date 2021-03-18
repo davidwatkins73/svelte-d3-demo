@@ -9,8 +9,9 @@
     import IndicatorBar from "./IndicatorBar.svelte";
     import {arc, mkArcs} from "./arcs";
     import {flowLayout} from "./flowLayout";
-    import { tweened } from 'svelte/motion';
-    import { cubicOut } from 'svelte/easing';
+    import {tweened} from 'svelte/motion';
+    import {cubicOut} from 'svelte/easing';
+    import DomainBar from "./DomainBar.svelte";
 
     const indicatorBarWidth = tweened(
         12,
@@ -145,18 +146,10 @@
     </g>
     <g transform="translate({width / 2} 0)" class="middle">
         {#each mids as mid}
-            <rect x={width / 6 * -1}
-                  y={mid.y}
-                  width={width / 3}
-                  height={mid.h}
-                  stroke="#ccc"
-                  fill="#fafafa"
-                  on:click={() => drillIn(mid)}/>
-            <text dy={mid.y + mid.h * 0.5 + 6 }
-                  text-anchor="middle">
-                {mid.data.data.name}
-                {mid.data.children ? "+" : "-" }
-            </text>
+            <DomainBar item={mid}
+                       width={width / 3}
+                       x={width/6 * -1}
+                       on:click={() => drillIn(mid)}/>
         {/each}
     </g>
 </svg>
