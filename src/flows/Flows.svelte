@@ -131,6 +131,7 @@
             <path d={d.path}
                   transform="translate({$indicatorBarWidth} 0)"
                   fill="url(#gradient-in)"
+                  filter="url(#glow)"
                   class="flow in-flow"/>
             <g transform="translate(0 {d.sy})">
                 <IndicatorBar height={d.sh}
@@ -145,6 +146,7 @@
         {#each outArcs as d, idx}
             <path d={d.path}
                   fill="url(#gradient-out)"
+                  filter="url(#glow)"
                   class="flow out-flow"/>
             <g transform="translate({(width / 3) - $indicatorBarWidth} {d.ey})">
                 <IndicatorBar height={d.eh}
