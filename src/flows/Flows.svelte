@@ -1,24 +1,18 @@
 <script>
     import _ from "lodash";
     import * as d3 from "d3";
+    import {cubicOut, cubicInOut} from 'svelte/easing';
+    import {tweened} from 'svelte/motion';
 
-    import {mkDataSet} from "./data";
-    import {selectedFacet, history} from "./stores/options";
-    import {mkStackData} from "./util";
     import Defs from "./Defs.svelte";
     import IndicatorBar from "./IndicatorBar.svelte";
-    import {arc, mkArcs} from "./arcs";
-    import {flowLayout} from "./flowLayout";
-    import {tweened} from 'svelte/motion';
-    import {cubicOut} from 'svelte/easing';
     import DomainBar from "./DomainBar.svelte";
+    import {selectedFacet, history} from "./stores/options";
+    import {hierarchyStack} from "./hierarchyStack";
+    import {flowLayout} from "./flowLayout";
+    import {arc, mkArcs} from "./arcs";
 
-    const indicatorBarWidth = tweened(
-        12,
-        {
-            duration: 400,
-            easing: cubicOut
-        });
+    import {mkDataSet} from "./data";
 
     export let data = mkDataSet({sourceCount: 100, targetCount: 250});
 
@@ -34,14 +28,14 @@
     let endpointPadding = 12;
     let tension = 0.7;
 
-
-    let activeDomainItems = [];
     let domainTree = null;
     let activeRoot = null;
 
     let inArcs = [];
     let outArcs = [];
     let mids = [];
+
+    const indicatorBarWidth = tweened(12, {duration: 400, easing: cubicInOut});
 
     $: layoutFn = flowLayout()
         .height(height)
@@ -66,27 +60,30 @@
         activeRoot = domainTree;
     }
 
-    $: activeDomainItems = _.map(
-        activeRoot.children,
-        d => ({
+    $: activeDomainItems = _
+        .chain(activeRoot.children)
+        .map(d => ({
             ...d,
             rollups: _.map(
                 d.descendants(),
                 c => c.id)
-        }));
+        }))
+        .orderBy(d => d.data.name)
+        .value();
+
+    const hierStackFn = hierarchyStack();
 
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
     $: facetDomain = _.find(data.facetDomains, {id: $selectedFacet});
-    $: inData = mkStackData(inFacet.values, activeDomainItems);
-    $: outData = mkStackData(outFacet.values, activeDomainItems);
+    $: inData = hierStackFn(inFacet.values, activeDomainItems);
+    $: outData = hierStackFn(outFacet.values, activeDomainItems);
     $: layoutData = layoutFn(inData, outData, activeDomainItems);
 
     $: mids = layoutData.mid;
     $: inArcs = mkArcs(layoutData.in, arcFn);
     $: outArcs = mkArcs(layoutData.out, arcFn);
 
-    /*
     $: console.log({
         data,
         inFacet,
@@ -96,9 +93,9 @@
         inData,
         outData,
         inArcs,
-        outArcs
+        outArcs,
+        activeDomainItems
     });
-    */
 
     function drillIn(mid) {
         if (_.isEmpty(mid.data.children)) return;
@@ -110,6 +107,15 @@
         history.update(xs => _.takeWhile(xs, x => x !== mid))
         activeRoot = mid;
     }
+
+    function expandIndicatorBar() {
+        indicatorBarWidth.set(100);
+    }
+
+    function collapseIndicatorBar() {
+        indicatorBarWidth.set(12);
+    }
+
 </script>
 
 <h1>Flows</h1>
@@ -128,6 +134,8 @@
                   class="flow in-flow"/>
             <g transform="translate(0 {d.sy})">
                 <IndicatorBar height={d.sh}
+                              on:mouseenter={expandIndicatorBar}
+                              on:mouseleave={collapseIndicatorBar}
                               width={$indicatorBarWidth}/>
             </g>
         {/each}
@@ -140,6 +148,8 @@
                   class="flow out-flow"/>
             <g transform="translate({(width / 3) - $indicatorBarWidth} {d.ey})">
                 <IndicatorBar height={d.eh}
+                              on:mouseenter={expandIndicatorBar}
+                              on:mouseleave={collapseIndicatorBar}
                               width={$indicatorBarWidth}/>
             </g>
         {/each}
