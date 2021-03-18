@@ -10,6 +10,7 @@
         <stop offset="100%"
               style="stop-color:#def9fa;stop-opacity:1;" />
     </linearGradient>
+
     <linearGradient spreadMethod="pad"
                     id="gradient-out"
                     x1="0%"
