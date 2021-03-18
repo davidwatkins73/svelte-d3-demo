@@ -102,7 +102,8 @@ function mkFlow(source, target) {
     return {
         source: source.id,
         target: target.id,
-        id: `${source.id}#${target.id}`
+        id: `${source.id}#${target.id}`,
+        authorityRating: randomPick(["R", "R", "A", "A", "G", "Z"])
     };
 }
 
