@@ -135,6 +135,7 @@
                   class="flow in-flow"/>
             <g transform="translate(0 {d.sy})">
                 <IndicatorBar height={d.sh}
+                              data={d.data}
                               on:mouseenter={expandIndicatorBar}
                               on:mouseleave={collapseIndicatorBar}
                               width={$indicatorBarWidth}/>
@@ -150,6 +151,7 @@
                   class="flow out-flow"/>
             <g transform="translate({(width / 3) - $indicatorBarWidth} {d.ey})">
                 <IndicatorBar height={d.eh}
+                              data={d.data}
                               on:mouseenter={expandIndicatorBar}
                               on:mouseleave={collapseIndicatorBar}
                               width={$indicatorBarWidth}/>

@@ -3,14 +3,14 @@
 
     export let width = 10;
     export let height;
-
-    const data = [1, 3, 6];
+    export let data;
 
     $: y = d3
         .scaleLinear()
         .range([0, height])
         .domain([0, 10]);
 
+    $: console.log({data})
 </script>
 
 <g on:click

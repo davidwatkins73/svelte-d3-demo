@@ -18,22 +18,22 @@ export function hierarchyStack() {
         // broken this up into counts and then a map for the result to make
         // it easier to return the output in the order that the input was given
 
-        const countsByParentId = _
-            .chain(data)
-            .map(d => datumIdToParentIdMap[valueId(d)]) // domain id
-            .reject(d => _.isNil(d))
-            .countBy(d => d)
-            .value();
-
+        const groupedByParentId = _.groupBy(
+            data,
+            d => datumIdToParentIdMap[valueId(d)]);
 
         return _
             .chain(parents)
-            .map(p => ({k: parentId(p), count: countsByParentId[parentId(p)], parent: p}))
+            .map(p => ({
+                k: parentId(p),
+                values: groupedByParentId[parentId(p)],
+                parent: p
+            }))
             .reduce(
                 (acc, d) => {
-                    const r = {...d, y: acc.total, h: d.count };
+                    const r = {...d, y: acc.total, h: d.values.length };
                     acc.values.push(r);
-                    acc.total += d.count;
+                    acc.total += d.values.length;
                     return acc;
                 },
                 {total: 0, values: []})
