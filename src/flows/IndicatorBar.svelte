@@ -34,5 +34,13 @@
               {width}
               height={y(d[0][1] - d[0][0])}
               fill={color(d.key)}/>
+        {#if width > 50 && y(d[0][1] - d[0][0]) > 26}
+            <text dy={y(d[0][0]) + (y(d[0][1] - d[0][0]) / 2 + 8)}
+                  text-anchor="end"
+                  dx={width/2 + 10}
+                  style="font-size: 22px">
+                {console.log(d) || d[0].data[d.key]}
+            </text>
+        {/if}
     {/each}
 </g>

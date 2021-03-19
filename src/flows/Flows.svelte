@@ -35,7 +35,7 @@
     let outArcs = [];
     let mids = [];
 
-    const indicatorBarWidth = tweened(12, {duration: 400, easing: cubicInOut});
+    const indicatorBarWidth = tweened(18, {duration: 400, easing: cubicInOut});
 
     $: layoutFn = flowLayout()
         .height(height)
@@ -124,12 +124,12 @@
     }
 
     function collapseIndicatorBar() {
-        indicatorBarWidth.set(12);
+        indicatorBarWidth.set(18);
     }
 
     function mkIndicatorData(data) {
         return _
-            .chain(data?.values)
+            .chain(data.values)
             .map(d => flowsById[d.flowId])
             .countBy(d => d.authorityRating)
             .value()
@@ -254,7 +254,7 @@
         <td>Indicator Bar Width ({Math.round($indicatorBarWidth)})</td>
         <td>
 <!--            <input type="range" min="0" max="100" bind:value={indicatorBarWidth}>-->
-            <button on:click={() => indicatorBarWidth.set($indicatorBarWidth === 12 ? 100 : 12)}>Bounce</button>
+            <button on:click={() => indicatorBarWidth.set($indicatorBarWidth === 18 ? 100 : 18)}>Bounce</button>
         </td>
         <td>Width ({width})</td>
         <td><input type="range" min="0" max="2000" bind:value={width}/></td>
