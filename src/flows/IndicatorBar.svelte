@@ -1,31 +1,38 @@
 <script>
     import * as d3 from "d3";
+    import _ from "lodash";
 
     export let width = 10;
     export let height;
-    export let data;
+    export let data = {};
+
+    const color = d3
+        .scaleOrdinal()
+        .domain(["R", "A", "G", "Z"])
+        .range(["#e79d9d", "#e7d49a", "#a8e29e", "#aaa"]);
+
+    $: stackData = d3
+        .stack()
+        .keys(color.domain())
+        ([data]);
+
+    $: total = _.sumBy(
+        color.domain(),
+        k => data[k] || 0);
 
     $: y = d3
         .scaleLinear()
         .range([0, height])
-        .domain([0, 10]);
-
-    $: console.log({data})
+        .domain([0, total]);
 </script>
 
 <g on:click
    on:mouseenter
    on:mouseleave>
-    <rect y="0"
-          {width}
-          height={y(2)}
-          fill="#c4ffca"/>
-    <rect y={y(2)}
-          {width}
-          height={y(5)}
-          fill="#ffd9ab"/>
-    <rect y={y(7)}
-          {width}
-          height={y(3)}
-          fill="#ffaca7"/>
+    {#each stackData as d}
+        <rect y={y(d[0][0])}
+              {width}
+              height={y(d[0][1] - d[0][0])}
+              fill={color(d.key)}/>
+    {/each}
 </g>

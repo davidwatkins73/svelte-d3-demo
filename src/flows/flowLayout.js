@@ -55,6 +55,7 @@ export function flowLayout() {
             out: _.map(
                 outData.values,
                 (d, i) => ({
+                    data: d,
                     sy: midY(d.k),
                     sh: midY.bandwidth(),
                     ey: outY(d.y) + (endpointPadding * (i)),

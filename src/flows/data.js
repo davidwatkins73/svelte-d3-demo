@@ -175,8 +175,8 @@ export function mkDataSet(config) {
         inbound,
         outbound,
         facetDomains: [
-            { id: "type", values: dataTypes, name: "Data Transports"},
-            { id: "transport", values: transports, name: "Data Types"}
+            { id: "type", values: dataTypes, name: "Data Transports" },
+            { id: "transport", values: transports, name: "Data Types" }
         ]
     }
 }

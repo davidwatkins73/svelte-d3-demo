@@ -53,7 +53,9 @@
             facetDomain.values,
             d => ({
                 ...d,
-                parentId: d.parentId ? d.parentId : root.id
+                parentId: d.parentId
+                    ? d.parentId
+                    : root.id
             }));
 
         domainTree = d3.stratify()(_.concat([root], domain));
@@ -73,6 +75,12 @@
 
     const hierStackFn = hierarchyStack();
 
+    $: flowsById = _
+        .chain([])
+        .concat(data.inbound.flows, data.outbound.flows)
+        .keyBy(d => d.id)
+        .value();
+
     $: inFacet = _.find(data.inbound.facets, {id: $selectedFacet});
     $: outFacet = _.find(data.outbound.facets, {id: $selectedFacet});
     $: facetDomain = _.find(data.facetDomains, {id: $selectedFacet});
@@ -84,6 +92,7 @@
     $: inArcs = mkArcs(layoutData.in, arcFn);
     $: outArcs = mkArcs(layoutData.out, arcFn);
 
+    /*
     $: console.log({
         data,
         inFacet,
@@ -94,8 +103,10 @@
         outData,
         inArcs,
         outArcs,
-        activeDomainItems
+        activeDomainItems,
+        flowsById
     });
+    */
 
     function drillIn(mid) {
         if (_.isEmpty(mid.data.children)) return;
@@ -114,6 +125,14 @@
 
     function collapseIndicatorBar() {
         indicatorBarWidth.set(12);
+    }
+
+    function mkIndicatorData(data) {
+        return _
+            .chain(data?.values)
+            .map(d => flowsById[d.flowId])
+            .countBy(d => d.authorityRating)
+            .value()
     }
 
 </script>
@@ -135,7 +154,7 @@
                   class="flow in-flow"/>
             <g transform="translate(0 {d.sy})">
                 <IndicatorBar height={d.sh}
-                              data={d.data}
+                              data={mkIndicatorData(d.data)}
                               on:mouseenter={expandIndicatorBar}
                               on:mouseleave={collapseIndicatorBar}
                               width={$indicatorBarWidth}/>
@@ -144,14 +163,14 @@
     </g>
     <g transform="translate({width / 3 * 2} 0)"
        class="outbound">
-        {#each outArcs as d, idx}
+        {#each outArcs as d}
             <path d={d.path}
                   fill="url(#gradient-out)"
                   filter="url(#glow)"
                   class="flow out-flow"/>
             <g transform="translate({(width / 3) - $indicatorBarWidth} {d.ey})">
                 <IndicatorBar height={d.eh}
-                              data={d.data}
+                              data={mkIndicatorData(d.data)}
                               on:mouseenter={expandIndicatorBar}
                               on:mouseleave={collapseIndicatorBar}
                               width={$indicatorBarWidth}/>
