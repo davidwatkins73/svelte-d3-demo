@@ -92,11 +92,10 @@
     $: inArcs = mkArcs(layoutData.in, arcFn);
     $: outArcs = mkArcs(layoutData.out, arcFn);
 
-    /*
     $: console.log({
+        activeRoot,
         data,
-        inFacet,
-        outFacet,
+        inFacet, outFacet,
         facetDomain,
         selectedFacet: $selectedFacet,
         inData,
@@ -106,7 +105,6 @@
         activeDomainItems,
         flowsById
     });
-    */
 
     function drillIn(mid) {
         if (_.isEmpty(mid.data.children)) return;
@@ -144,6 +142,22 @@
      bind:this={el}
      style="border: 1px solid #eee">
     <Defs/>
+    <text class="history"
+          dy="20"
+          dx="10">
+        {#each $history as h}
+            <tspan class="history-link"
+                   on:click={() => rewind(h)}>
+                {h.data.name}
+            </tspan>
+            <tspan>
+                &raquo;
+            </tspan>
+        {/each}
+        <tspan class="history-active-root">
+            {activeRoot.data.name}
+        </tspan>
+    </text>
     <g transform="translate(0 0)"
        class="inbound">
         {#each inArcs as d}
@@ -229,19 +243,10 @@
                    bind:value={midPaddingInner}/>
         </td>
         <td>
-            History
+            --
         </td>
         <td>
-            <ul class="history">
-                {#each $history as h}
-                    <li>
-                        <button on:click={() => rewind(h)}
-                                class="link">
-                            {h.data.name}
-                        </button>
-                    </li>
-                {/each}
-            </ul>
+            --
         </td>
     </tr>
     <tr>
@@ -253,7 +258,6 @@
     <tr>
         <td>Indicator Bar Width ({Math.round($indicatorBarWidth)})</td>
         <td>
-<!--            <input type="range" min="0" max="100" bind:value={indicatorBarWidth}>-->
             <button on:click={() => indicatorBarWidth.set($indicatorBarWidth === 18 ? 100 : 18)}>Bounce</button>
         </td>
         <td>Width ({width})</td>
@@ -268,19 +272,24 @@
     }
 
     .out-flow {
-        /*fill: #baf4f6;*/
         stroke: #aaa;
-        /*fill: #fdde97;*/
-        /*stroke: #f6c50b;*/
     }
 
     .in-flow {
-        /*fill: #baf4f6;*/
         stroke: #aaa;
     }
 
     .history {
-        list-style: none;
+        font-size: 1.2em;
+    }
+
+    .history-link {
+        cursor: pointer;
+        fill: #045cac
+    }
+
+    .history-active-root {
+        fill: #aaa
     }
 
 </style>
