@@ -7,7 +7,7 @@
     import Defs from "./Defs.svelte";
     import IndicatorBar from "./IndicatorBar.svelte";
     import DomainBar from "./DomainBar.svelte";
-    import {selectedFacet, history} from "./stores/options";
+    import {selectedFacet, history, showBreadcrumbs} from "./stores/options";
     import {hierarchyStack} from "./hierarchyStack";
     import {flowLayout} from "./flowLayout";
     import {arc, mkArcs} from "./arcs";
@@ -142,6 +142,7 @@
      bind:this={el}
      style="border: 1px solid #eee">
     <Defs/>
+    {#if $showBreadcrumbs}
     <text class="history"
           dy="20"
           dx="10">
@@ -158,6 +159,7 @@
             {activeRoot.data.name}
         </tspan>
     </text>
+    {/if}
     <g transform="translate(0 0)"
        class="inbound">
         {#each inArcs as d}
@@ -243,10 +245,13 @@
                    bind:value={midPaddingInner}/>
         </td>
         <td>
-            --
+            Breadcrumbs ({$showBreadcrumbs})
         </td>
         <td>
-            --
+            <button class="link"
+                    on:click={() => $showBreadcrumbs = !$showBreadcrumbs}>
+                Toggle
+            </button>
         </td>
     </tr>
     <tr>
