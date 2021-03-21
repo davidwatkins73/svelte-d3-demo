@@ -7,7 +7,10 @@
     import Defs from "./Defs.svelte";
     import IndicatorBar from "./IndicatorBar.svelte";
     import DomainBar from "./DomainBar.svelte";
-    import {selectedFacet, history, showBreadcrumbs} from "./stores/options";
+    import Breadcrumbs from "./Breadcrumbs.svelte";
+
+    import {selectedFacet, history, showBreadcrumbs, activeRoot, drillIn} from "./stores/options";
+
     import {hierarchyStack} from "./hierarchyStack";
     import {flowLayout} from "./flowLayout";
     import {arc, mkArcs} from "./arcs";
@@ -29,7 +32,6 @@
     let tension = 0.7;
 
     let domainTree = null;
-    let activeRoot = null;
 
     let inArcs = [];
     let outArcs = [];
@@ -59,11 +61,11 @@
             }));
 
         domainTree = d3.stratify()(_.concat([root], domain));
-        activeRoot = domainTree;
+        activeRoot.set(domainTree);
     }
 
     $: activeDomainItems = _
-        .chain(activeRoot.children)
+        .chain($activeRoot.children)
         .map(d => ({
             ...d,
             rollups: _.map(
@@ -93,7 +95,7 @@
     $: outArcs = mkArcs(layoutData.out, arcFn);
 
     $: console.log({
-        activeRoot,
+        activeRoot: $activeRoot,
         data,
         inFacet, outFacet,
         facetDomain,
@@ -105,17 +107,6 @@
         activeDomainItems,
         flowsById
     });
-
-    function drillIn(mid) {
-        if (_.isEmpty(mid.data.children)) return;
-        history.update(xs => [...xs, activeRoot]);
-        activeRoot = mid.data
-    }
-
-    function rewind(mid) {
-        history.update(xs => _.takeWhile(xs, x => x !== mid))
-        activeRoot = mid;
-    }
 
     function expandIndicatorBar() {
         indicatorBarWidth.set(100);
@@ -143,22 +134,7 @@
      style="border: 1px solid #eee">
     <Defs/>
     {#if $showBreadcrumbs}
-    <text class="history"
-          dy="20"
-          dx="10">
-        {#each $history as h}
-            <tspan class="history-link"
-                   on:click={() => rewind(h)}>
-                {h.data.name}
-            </tspan>
-            <tspan>
-                &raquo;
-            </tspan>
-        {/each}
-        <tspan class="history-active-root">
-            {activeRoot.data.name}
-        </tspan>
-    </text>
+        <Breadcrumbs/>
     {/if}
     <g transform="translate(0 0)"
        class="inbound">
@@ -198,7 +174,7 @@
             <DomainBar item={mid}
                        width={width / 3}
                        x={width/6 * -1}
-                       on:click={() => drillIn(mid)}/>
+                       on:click={() => drillIn(mid, $activeRoot)}/>
         {/each}
     </g>
 </svg>
@@ -283,18 +259,4 @@
     .in-flow {
         stroke: #aaa;
     }
-
-    .history {
-        font-size: 1.2em;
-    }
-
-    .history-link {
-        cursor: pointer;
-        fill: #045cac
-    }
-
-    .history-active-root {
-        fill: #aaa
-    }
-
 </style>
