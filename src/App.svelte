@@ -7,10 +7,10 @@
 	import Splat from "./Splat.svelte";
 	import SankeyDemo from "./sankey/SankeyDemo.svelte";
 	import Curves from "./Curves.svelte";
-	import Timeline from "./tl/Timeline.svelte";
 	import TimelineDemo from "./tl/TimelineDemo.svelte";
 	import Flows from "./flows/Flows.svelte";
 	import CurveDemo from "./flows/CurveDemo.svelte";
+	import ColorPickerDemo from "./cp/ColorPickerDemo.svelte";
 </script>
 
 <main>
@@ -23,6 +23,12 @@
 	<h2>Flows</h2>
 	<div class="viz">
 		<Flows/>
+	</div>
+
+	<h2>Colors</h2>
+	<div class="viz">
+		<ColorPickerDemo/>
+		<p>Simple color picker (x3)</p>
 	</div>
 
 	<h2>Curves 2</h2>
