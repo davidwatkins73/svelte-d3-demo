@@ -43,7 +43,7 @@
         margin-top: 0.5em;
     }
 
-    input, button, select, textarea {
+    input {
         padding: 0.4em;
         margin: 10px;
         box-sizing: content-box;
