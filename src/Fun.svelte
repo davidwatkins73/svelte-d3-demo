@@ -24,10 +24,9 @@
     let seed = Date().toString();
 
     $: svg = d3.select(el);
-    $: rnd = xmur3(seed);
 
-
-    function regen() {
+    $: {
+        const rnd = xmur3(seed);
         const pointData = Array
             .from({length: Math.ceil(nextFloat(rnd) * 4) + 1})
             .map(idx => ({
@@ -103,10 +102,10 @@
         newPerimeters
             .exit()
             .remove();
-
-
     }
 </script>
+
+
 <svg bind:this={el} viewBox="0 0 {w} {h}" width="80%" style="border: 1px solid pink;">
     <filter id="displacementFilter">
         <feTurbulence type="turbulence" baseFrequency="0.05"
@@ -122,8 +121,10 @@
     </filter>
     <circle cx={w/2} cy={h/2} r="10" fill="#fafafa"/>
 </svg>
-<input type="text" bind:value={seed}>
-<button on:click={() => {regen()}}>New</button>
-<button class="btn-link" on:click={() => {seed = new Date();} }>Reseed</button>
+
+<label>
+    Seed:
+    <input type="text" bind:value={seed}>
+</label>
 
 
