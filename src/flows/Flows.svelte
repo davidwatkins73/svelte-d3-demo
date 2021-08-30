@@ -94,20 +94,6 @@
     $: inArcs = mkArcs(layoutData.in, arcFn);
     $: outArcs = mkArcs(layoutData.out, arcFn);
 
-    $: console.log({
-        activeRoot: $activeRoot,
-        data,
-        inFacet, outFacet,
-        facetDomain,
-        selectedFacet: $selectedFacet,
-        inData,
-        outData,
-        inArcs,
-        outArcs,
-        activeDomainItems,
-        flowsById
-    });
-
     function expandIndicatorBar() {
         indicatorBarWidth.set(100);
     }

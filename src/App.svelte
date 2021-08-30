@@ -12,6 +12,7 @@
 	import CurveDemo from "./flows/CurveDemo.svelte";
 	import ColorPickerDemo from "./cp/ColorPickerDemo.svelte";
 	import Fun from "./Fun.svelte";
+	import FancyScroll from "./fancy-scroll/FancyScroll.svelte";
 </script>
 
 <main>
@@ -20,6 +21,11 @@
 		A collection of simple visualisations created whilst learning about Svelte and D3.
 		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
 	</p>
+
+	<h2>Fancy Scroll</h2>
+	<div class="viz">
+		<FancyScroll/>
+	</div>
 
 	<h2>Fun</h2>
 	<div class="viz">
