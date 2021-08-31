@@ -10,7 +10,10 @@
         clientScrollOffset,
         ratingColors,
         clientQry,
-        categoryQry} from "./fancy-store";
+        categoryQry,
+        layout,
+        layoutDirections,
+        layoutDirection} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
     import {mkCategories, mkClients, mkArcs, dimensions, activeLayout} from "./fancy-utils"
@@ -51,9 +54,10 @@
         return _.map(
             arcs,
             a => {
-                const left = activeLayout.left;
-                const right = activeLayout.right;
-                const calcY = (direction, a) => direction.scale(categoryY, clientY)(direction.id(a)) + direction.offset(offset) + direction.dimensions.height / 2
+                const left = $layout.left;
+                const right = $layout.right;
+
+                const calcY = (direction, a) => direction.scale(direction.id(a)) + direction.offset(offset) + direction.dimensions.height / 2
 
                 const pos = clientY(a.clientId);
                 const showing = pos > start && pos < end;
@@ -71,9 +75,18 @@
 
     $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $filteredArcs);
 
+    let directionToggle = false;
+    $: $layoutDirection = directionToggle ? layoutDirections.clientToCategory : layoutDirections.categoryToClient
+
 </script>
 
 <div class="row">
+    <label for="toggle-direction">
+        Toggle direction:
+        <input id="toggle-direction"
+               type="checkbox"
+               bind:checked={directionToggle}>
+    </label>
     Filter categories: <input type="text" bind:value={$categoryQry}/>
     Filter clients: <input type="text" bind:value={$clientQry}/>
 </div>
@@ -90,13 +103,13 @@
         </clipPath>
 
         <g id="categories"
-           transform={`translate(${activeLayout.categoryTranslateX}, 0)`}>
+           transform={`translate(${$layout.categoryTranslateX}, 0)`}>
             <Categories/>
         </g>
 
         <g id="clients"
            clip-path="url(#row-clip)"
-           transform={`translate(${activeLayout.clientTranslateX}, 0)`}>
+           transform={`translate(${$layout.clientTranslateX}, 0)`}>
             <Clients/>
         </g>
 
