@@ -11,7 +11,7 @@ export const dimensions = {
     },
     clientList: {
         paddingTop: 20,
-        innerPadding: 1.8
+        innerPadding: 1.4
     },
     diagram: {
         height: 500,
@@ -63,7 +63,7 @@ export function randomPick(xs) {
 
 export function mkClients(){
     return _
-        .range(0, 140)
+        .range(0, 80)
         .map(d => ({
             name: `C${d}`,
             id: d
@@ -76,7 +76,7 @@ export function mkCategories(){
         .map(d => ({
             name: `Category ${d}`,
             id: d,
-            hasChildren: d % 3 == 0
+            hasChildren: d % 3 === 0
         }))
 }
 

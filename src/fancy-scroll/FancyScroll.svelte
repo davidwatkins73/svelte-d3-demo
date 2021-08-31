@@ -83,7 +83,6 @@
         .filter(d => d.showing)
         .map(d => {
             const total = _.sumBy(d.arc.tipRatings, r => r.count);
-            console.log({total})
 
             let tipSpace = 1 - 0.97;
             let currentStop = 0.97;
@@ -151,7 +150,7 @@
             {/each}
         </defs>
 
-         <clipPath id="row-clip">
+        <clipPath id="row-clip">
             <rect x="0"
                   y="0"
                   width={dimensions.client.width}
@@ -192,6 +191,7 @@
         opacity: 0.07;
         stroke-width: 0.5;
         xxtransition: opacity, stroke-width 1s;
+        transition: transform 1s;
     }
 
     :global(line.showing) {

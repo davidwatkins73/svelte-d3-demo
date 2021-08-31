@@ -2,6 +2,7 @@ import {derived, writable} from "svelte/store";
 import * as d3 from "d3";
 import _ from "lodash";
 import {dimensions} from "./fancy-utils"
+import {tweened} from "svelte/motion";
 
 export const layoutDirections = {
     categoryToClient: "categoryToClient",
@@ -53,7 +54,7 @@ export const categoryScale = derived(filteredCategories, c => d3
     .range([0, 400])
     .domain(_.map(c, "id")));
 
-export const clientScrollOffset = writable(0);
+export const clientScrollOffset = tweened(0, {duration: 200});
 
 
 export const layout = derived(
