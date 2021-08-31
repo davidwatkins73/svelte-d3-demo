@@ -6,7 +6,7 @@ import _ from "lodash";
 export const dimensions = {
     client: {
         height: 40,
-        width: 100
+        width: 60
     },
     category: {
         height: 60,
@@ -16,8 +16,8 @@ export const dimensions = {
         paddingTop: 100
     },
     diagram: {
-        width: 500,
-        height: 500
+        height: 500,
+        width: 500
     }
 };
 

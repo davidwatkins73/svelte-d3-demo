@@ -57,7 +57,7 @@
                 const showing = pos > start && pos < end;
                 return {
                     x1: dimensions.category.width,
-                    x2: 400,
+                    x2: dimensions.diagram.width - dimensions.client.width,
                     y1,
                     y2,
                     showing,
@@ -92,7 +92,7 @@
 
         <g id="clients"
            clip-path="url(#row-clip)"
-           transform="translate(400, 0)">
+           transform={`translate(${dimensions.diagram.width - dimensions.client.width}, 0)`}>
             <Clients/>
         </g>
 
