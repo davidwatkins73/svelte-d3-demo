@@ -8,6 +8,7 @@
     <g transform={`translate(0, ${$categoryScale(category.id)})`}>
         <rect fill="#eee"
               stroke="#ccc"
+              rx={dimensions.category.height / 2}
               width={dimensions.category.width}
               height={dimensions.category.height}/>
         <text dx="16"

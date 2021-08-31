@@ -8,6 +8,7 @@
     <g transform={`translate(0, ${$clientScale(client.id)})`}>
         <rect fill="#eee"
               stroke="#999"
+              rx={dimensions.client.height / 2}
               width={dimensions.client.width}
               height={dimensions.client.height}/>
         <text dx="10"
