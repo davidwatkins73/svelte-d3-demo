@@ -6,7 +6,7 @@
 <g transform={`translate(0, ${$clientScrollOffset})`}>
 {#each $filteredClients as client}
     <g transform={`translate(0, ${$clientScale(client.id)})`}>
-        <rect fill="#eee"
+        <rect fill="#eef8ff"
               stroke="#999"
               rx={dimensions.client.height / 2}
               width={dimensions.client.width}

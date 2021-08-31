@@ -51,7 +51,7 @@ export const clientScale = derived(filteredClients, (c) => d3
 export const categoryScale = derived(filteredCategories, c => d3
     .scaleBand()
     .padding(0.2)
-    .range([0, 400])
+    .range([0, dimensions.diagram.height])
     .domain(_.map(c, "id")));
 
 export const clientScrollOffset = tweened(0, {duration: 200});

@@ -6,17 +6,17 @@
 
 {#each $filteredCategories as category}
     <g transform={`translate(0, ${$categoryScale(category.id)})`}>
-        <rect fill="#eee"
+        <rect fill="#f4fff0"
               stroke="#ccc"
               rx={dimensions.category.height / 2}
               width={dimensions.category.width}
-              height={dimensions.category.height}/>
+              height={$categoryScale.bandwidth()}/>
         <text dx="16"
-              dy={dimensions.category.height / 2 + 8}>
+              dy={$categoryScale.bandwidth() / 2 + 8}>
             {category.name}
         </text>
         <text dx="120"
-              dy={dimensions.category.height / 2 + 8}>
+              dy={$categoryScale.bandwidth() / 2 + 8}>
             {category.hasChildren ? "+" : "-"}
         </text>
     </g>
