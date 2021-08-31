@@ -47,8 +47,6 @@
             .selectAll(".point")
             .data(pointData);
 
-        console.log({pointData, perimeterData})
-
         const perimeterColor = d3
             .scaleLinear()
             .domain([0, perimeterData.length])

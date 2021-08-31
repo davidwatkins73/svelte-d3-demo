@@ -18,7 +18,7 @@
     $categories = ["A", "B", "C", "D", "E"];
 
     $clients = _
-        .range(0, 200)
+        .range(0, 140)
         .map(d => ({
             name: `c${d}`,
             id: d,
@@ -26,9 +26,11 @@
         }));
 
     function onScroll(evt) {
-        clientScrollOffset.update(d => {
-            const nv = d + evt.sourceEvent.wheelDeltaY;
-            return _.clamp(nv, ($clients.length * 20) * -1, 20)
+        clientScrollOffset.update(origValue => {
+            const dy = evt.sourceEvent.wheelDeltaY;
+            return dy
+                ? _.clamp(origValue + dy, ($clients.length * 20) * -1, 20)
+                : origValue;
         });
     }
 
@@ -38,16 +40,27 @@
             .zoom()
             .on("zoom", onScroll));
 
-    $: {
-        const start = ($clientScrollOffset * -1) -10;
-        const end = ($clientScrollOffset * -1) + 490;
-        _.forEach($clients, c => {
-            const pos = $clientScale(c.id);
-            d3.select(`line[data-id="${c.id}"`)
-                .classed("showing", pos > start && pos < end);
-
-        })
+    function updateShowing(offset, clientY, categoryY, arcs) {
+        const start = (offset * -1) - 10;
+        const end = (offset * -1) + 490;
+        return _.map(
+            arcs,
+            a => {
+                const pos = clientY(a.id);
+                const y1 = categoryY(a.cat) + categoryY.bandwidth() / 2;
+                const y2 = pos + offset + clientY.bandwidth() / 2;
+                const showing = pos > start && pos < end;
+                return {
+                    x1: 150,
+                    x2: 400,
+                    y1,
+                    y2,
+                    showing
+                };
+            });
     }
+
+    $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $clients);
 
 
 </script>
@@ -76,13 +89,13 @@
         </g>
 
         <g id="arcs">
-            {#each $clients as client, idx}
-                <line x1={150}
-                      data-id={client.id}
-                      x2={400}
-                      y1={$categoryScale(client.cat) + $categoryScale.bandwidth() / 2}
-                      y2={$clientScale(client.id) + $clientScrollOffset + $clientScale.bandwidth() / 2}
-                      stroke="red"/>
+        {#each screenArcs as arc}
+                <line x1={arc.x1}
+                      x2={arc.x2}
+                      y1={arc.y1}
+                      y2={arc.y2}
+                      class={arc.showing ? "showing" : ""}
+                      stroke="green"/>
             {/each}
         </g>
     </svg>
@@ -97,12 +110,11 @@
     line {
         opacity: 0.07;
         stroke-width: 0.5;
-        transition: opacity, stroke-width 0.2s;
+        transition: opacity, stroke-width 1s;
     }
 
     :global(line.showing) {
         opacity: 0.7;
         stroke-width: 1.5;
-
     }
 </style>
