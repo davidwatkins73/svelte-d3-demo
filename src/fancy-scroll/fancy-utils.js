@@ -1,7 +1,4 @@
-import {derived, writable} from "svelte/store";
-import * as d3 from "d3";
 import _ from "lodash";
-
 
 export const dimensions = {
     client: {
@@ -20,6 +17,34 @@ export const dimensions = {
         width: 500
     }
 };
+
+const catLayout = {
+    id: a => a.categoryId,
+    scale: (catYPos, cliYPos) => catYPos,
+    dimensions: dimensions.category,
+    offset: () => 0
+}
+
+const cliLayout = {
+    id: a => a.clientId,
+    scale: (catYPos, cliYPos) => cliYPos,
+    dimensions: dimensions.client,
+    offset: (x) => x
+}
+
+export const layout = {
+    categoryToClient: {
+        left: catLayout,
+        right: cliLayout
+    },
+    clientToCategory: {
+        left: cliLayout,
+        right: catLayout
+    }
+}
+
+export const activeLayout = layout.categoryToClient;
+
 
 
 function randomPick(xs) {

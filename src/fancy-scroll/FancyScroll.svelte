@@ -13,7 +13,7 @@
         categoryQry} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
-    import {mkCategories, mkClients, mkArcs, dimensions} from "./fancy-utils"
+    import {mkCategories, mkClients, mkArcs, dimensions, activeLayout} from "./fancy-utils"
     import _ from "lodash";
     import * as d3 from "d3";
 
@@ -51,15 +51,18 @@
         return _.map(
             arcs,
             a => {
+                const left = activeLayout.left;
+                const right = activeLayout.right;
+                const calcY = (direction, a) => direction.scale(categoryY, clientY)(direction.id(a)) + direction.offset(offset) + direction.dimensions.height / 2
+
                 const pos = clientY(a.clientId);
-                const y1 = categoryY(a.categoryId) + dimensions.category.height / 2;
-                const y2 = pos + offset + clientY.bandwidth() / 2;
                 const showing = pos > start && pos < end;
+
                 return {
-                    x1: dimensions.category.width,
-                    x2: dimensions.diagram.width - dimensions.client.width,
-                    y1,
-                    y2,
+                    x1: left.dimensions.width,
+                    x2: dimensions.diagram.width - right.dimensions.width,
+                    y1: calcY(left, a),
+                    y2: calcY(right, a),
                     showing,
                     color: ratingColors(a.ratingId)
                 };
