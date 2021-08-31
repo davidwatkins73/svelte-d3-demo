@@ -1,5 +1,6 @@
 <script>
     import {filteredCategories, categoryScale} from "./fancy-store";
+    import {dimensions} from "./fancy-utils"
 
 </script>
 
@@ -7,14 +8,14 @@
     <g transform={`translate(0, ${$categoryScale(category.id)})`}>
         <rect fill="#eee"
               stroke="#ccc"
-              width="150"
-              height={40}/>
+              width={dimensions.category.width}
+              height={dimensions.category.height}/>
         <text dx="16"
-              dy={20 + 8}>
+              dy={dimensions.category.height / 2 + 8}>
             {category.name}
         </text>
         <text dx="120"
-              dy={20 + 8}>
+              dy={dimensions.category.height / 2 + 8}>
             {category.hasChildren ? "+" : "-"}
         </text>
     </g>

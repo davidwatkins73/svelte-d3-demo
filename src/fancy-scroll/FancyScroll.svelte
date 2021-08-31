@@ -1,8 +1,19 @@
 <script>
-    import {categories, categoryScale, clients, filteredClients, arcs, filteredArcs, clientScale, clientScrollOffset, ratingColors, qry, dtQry} from "./fancy-store";
+    import {
+        categories,
+        categoryScale,
+        clients,
+        filteredClients,
+        arcs,
+        filteredArcs,
+        clientScale,
+        clientScrollOffset,
+        ratingColors,
+        clientQry,
+        categoryQry} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
-    import {mkCategories, mkClients, mkArcs} from "./fancy-utils"
+    import {mkCategories, mkClients, mkArcs, dimensions} from "./fancy-utils"
     import _ from "lodash";
     import * as d3 from "d3";
 
@@ -19,11 +30,11 @@
             const dy = evt.sourceEvent.wheelDeltaY;
 
             const minY = _.clamp(
-                (($filteredClients.length * 20) * -1) + 480,
+                (($filteredClients.length * dimensions.client.height) * -1) + 480,
                 0);
 
             return dy
-                ? _.clamp(origValue + dy, minY, 20)
+                ? _.clamp(origValue + dy, minY, dimensions.clientList.paddingTop)
                 : origValue;
         });
     }
@@ -41,11 +52,11 @@
             arcs,
             a => {
                 const pos = clientY(a.clientId);
-                const y1 = categoryY(a.categoryId) + 20;
+                const y1 = categoryY(a.categoryId) + dimensions.category.height / 2;
                 const y2 = pos + offset + clientY.bandwidth() / 2;
                 const showing = pos > start && pos < end;
                 return {
-                    x1: 150,
+                    x1: dimensions.category.width,
                     x2: 400,
                     y1,
                     y2,
@@ -60,19 +71,19 @@
 </script>
 
 <div class="row">
-    Filter apps: <input type="text" bind:value={$qry}/>
-    Filter datatypes: <input type="text" bind:value={$dtQry}/>
+    Filter categories: <input type="text" bind:value={$categoryQry}/>
+    Filter clients: <input type="text" bind:value={$clientQry}/>
 </div>
 <div class="row">
     <svg bind:this={svgElem}
-         viewBox="0 0 500 500"
+         viewBox={`0 0 ${dimensions.diagram.width} ${dimensions.diagram.height}`}
          width="400"
          height="400">
          <clipPath id="row-clip">
             <rect x="0"
                   y="0"
-                  width="500"
-                  height="500"/>
+                  width={dimensions.client.width}
+                  height={dimensions.diagram.height}/>
         </clipPath>
 
         <g id="categories">
@@ -101,7 +112,7 @@
 <style>
     svg {
         margin: 10px;
-        border: 1px solid green;
+        xxborder: 1px solid green;
     }
 
     line {

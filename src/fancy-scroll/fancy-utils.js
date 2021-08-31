@@ -2,6 +2,26 @@ import {derived, writable} from "svelte/store";
 import * as d3 from "d3";
 import _ from "lodash";
 
+
+export const dimensions = {
+    client: {
+        height: 40,
+        width: 100
+    },
+    category: {
+        height: 60,
+        width: 200
+    },
+    clientList: {
+        paddingTop: 100
+    },
+    diagram: {
+        width: 500,
+        height: 500
+    }
+};
+
+
 function randomPick(xs) {
     if (!xs) throw new Error("Cannot pick from a null set of options");
 
@@ -11,16 +31,11 @@ function randomPick(xs) {
 }
 
 
-// export function mkCategories(){
-//     return ["A", "B", "C", "D", "E"]
-// }
-
-
 export function mkClients(){
     return _
         .range(0, 140)
         .map(d => ({
-            name: `c${d}`,
+            name: `C${d}`,
             id: d
         }))
 }
