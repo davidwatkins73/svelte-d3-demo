@@ -35,16 +35,20 @@ const cliLayout = {
 export const layout = {
     categoryToClient: {
         left: catLayout,
-        right: cliLayout
+        right: cliLayout,
+        clientTranslateX: dimensions.diagram.width - dimensions.client.width,
+        categoryTranslateX: 0
     },
     clientToCategory: {
         left: cliLayout,
-        right: catLayout
+        right: catLayout,
+        clientTranslateX: 0,
+        categoryTranslateX: dimensions.diagram.width - dimensions.category.width
     }
 }
 
-export const activeLayout = layout.categoryToClient;
 
+export const activeLayout = layout.clientToCategory;
 
 
 function randomPick(xs) {

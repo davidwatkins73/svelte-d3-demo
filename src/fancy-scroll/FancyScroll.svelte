@@ -89,13 +89,14 @@
                   height={dimensions.diagram.height}/>
         </clipPath>
 
-        <g id="categories">
+        <g id="categories"
+           transform={`translate(${activeLayout.categoryTranslateX}, 0)`}>
             <Categories/>
         </g>
 
         <g id="clients"
            clip-path="url(#row-clip)"
-           transform={`translate(${dimensions.diagram.width - dimensions.client.width}, 0)`}>
+           transform={`translate(${activeLayout.clientTranslateX}, 0)`}>
             <Clients/>
         </g>
 
