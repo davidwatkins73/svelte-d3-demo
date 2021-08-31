@@ -23,13 +23,8 @@
 		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
 	</p>
 
-	<h2>Flow Diagram 2</h2>
-	<div class="viz">
-		<FlowDiagram2/>
-	</div>
-
 	<h2>Fancy Scroll</h2>
-	<div class="viz">
+	<div xxclass="viz">
 		<FancyScroll/>
 	</div>
 

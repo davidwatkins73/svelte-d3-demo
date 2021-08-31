@@ -2,19 +2,19 @@ import _ from "lodash";
 
 export const dimensions = {
     client: {
-        height: 40,
-        width: 60
-    },
-    category: {
-        height: 60,
+        height: 20,
         width: 200
     },
+    category: {
+        height: 40,
+        width: 150
+    },
     clientList: {
-        paddingTop: 100
+        paddingTop: 20
     },
     diagram: {
         height: 500,
-        width: 500
+        width: 800
     }
 };
 

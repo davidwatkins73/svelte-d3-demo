@@ -93,8 +93,8 @@
 <div class="row">
     <svg bind:this={svgElem}
          viewBox={`0 0 ${dimensions.diagram.width} ${dimensions.diagram.height}`}
-         width="400"
-         height="400">
+         width="800"
+         height="500">
          <clipPath id="row-clip">
             <rect x="0"
                   y="0"
