@@ -1,5 +1,5 @@
 <script>
-    import {categories, categoryScale, clients, filteredClients, arcs, filteredArcs, clientScale, clientScrollOffset, ratingColors, qry} from "./fancy-store";
+    import {categories, categoryScale, clients, filteredClients, arcs, filteredArcs, clientScale, clientScrollOffset, ratingColors, qry, dtQry} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
     import {mkCategories, mkClients, mkArcs} from "./fancy-utils"
@@ -11,7 +11,7 @@
     $categories = mkCategories();
     $clients = mkClients();
 
-    $arcs = mkArcs($clients);
+    $arcs = mkArcs($clients, $categories);
 
     function onScroll(evt) {
 
@@ -41,7 +41,7 @@
             arcs,
             a => {
                 const pos = clientY(a.clientId);
-                const y1 = categoryY(a.categoryId) + categoryY.bandwidth() / 2;
+                const y1 = categoryY(a.categoryId) + 20;
                 const y2 = pos + offset + clientY.bandwidth() / 2;
                 const showing = pos > start && pos < end;
                 return {
@@ -59,10 +59,11 @@
 
 </script>
 
-
-<div >
-
-    <input type="text" bind:value={$qry}/>
+<div class="row">
+    Filter apps: <input type="text" bind:value={$qry}/>
+    Filter datatypes: <input type="text" bind:value={$dtQry}/>
+</div>
+<div class="row">
     <svg bind:this={svgElem}
          viewBox="0 0 500 500"
          width="400"

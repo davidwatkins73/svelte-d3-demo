@@ -1,17 +1,21 @@
 <script>
-    import {categories, categoryScale} from "./fancy-store";
+    import {filteredCategories, categoryScale} from "./fancy-store";
 
 </script>
 
-{#each $categories as category}
-    <g transform={`translate(0, ${$categoryScale(category)})`}>
+{#each $filteredCategories as category}
+    <g transform={`translate(0, ${$categoryScale(category.id)})`}>
         <rect fill="#eee"
               stroke="#ccc"
               width="150"
-              height={$categoryScale.bandwidth()}/>
+              height={40}/>
         <text dx="16"
-              dy={$categoryScale.bandwidth()/2 + 8}>
-            {category}
+              dy={20 + 8}>
+            {category.name}
+        </text>
+        <text dx="120"
+              dy={20 + 8}>
+            {category.hasChildren ? "+" : "-"}
         </text>
     </g>
 {/each}

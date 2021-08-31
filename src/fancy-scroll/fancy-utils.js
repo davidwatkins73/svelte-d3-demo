@@ -11,9 +11,9 @@ function randomPick(xs) {
 }
 
 
-export function mkCategories(){
-    return ["A", "B", "C", "D", "E"]
-}
+// export function mkCategories(){
+//     return ["A", "B", "C", "D", "E"]
+// }
 
 
 export function mkClients(){
@@ -25,15 +25,25 @@ export function mkClients(){
         }))
 }
 
+export function mkCategories(){
+    return _
+        .range(1, 7)
+        .map(d => ({
+            name: `Category ${d}`,
+            id: d,
+            hasChildren: d % 3 == 0
+        }))
+}
 
-export function mkArcs(clients){
+
+export function mkArcs(clients, categories){
     return _
         .chain(clients)
         .flatMap(d => _.map(
             _.range(Math.ceil(Math.random() * 5)),
             () => ({
                 clientId: d.id,
-                categoryId: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"]),
+                categoryId: randomPick(_.map(categories, d => d.id)),
                 ratingId: Math.ceil(Math.random() * 6)
             })))
         .value();

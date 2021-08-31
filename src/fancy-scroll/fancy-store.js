@@ -6,27 +6,30 @@ export const categories = writable([]);
 export const clients = writable([]);
 export const arcs = writable([]);
 export const qry = writable(null);
+export const dtQry = writable(null);
+
+
+export const filteredCategories = derived([dtQry, categories], ([q, cats]) => {
+    return q == null
+        ? cats
+        : _.filter(cats, c => c.name.indexOf(q) !== -1);
+})
+
 
 export const filteredClients = derived([qry, clients], ([q, cs]) => {
     return q === null
         ? cs
-        : _.filter(cs, c  => c.name.indexOf(q) !== -1)
+        : _.filter(cs, c => c.name.indexOf(q) !== -1)
 });
 
-
-export const filteredArcs = derived([arcs, filteredClients], ([acs, fcs]) => {
+export const filteredArcs = derived([arcs, filteredClients, filteredCategories], ([acs, fcs, fcats]) => {
 
     clientScrollOffset.set(0);
 
     const filteredClientIds = _.map(fcs, c => c.id);
-    return _.filter(acs, a => _.includes(filteredClientIds, a.clientId));
+    const filteredCatIds = _.map(fcats, c => c.id);
+    return _.filter(acs, a => _.includes(filteredClientIds, a.clientId) && _.includes(filteredCatIds, a.categoryId));
 });
-
-
-// turn cat into another object, indictor for plus, sepearte search for groups
-
-// affects other derived clients/arcs
-
 
 
 export const ratingColors = d3.scaleOrdinal()
@@ -39,10 +42,10 @@ export const clientScale = derived(filteredClients, (c) => d3
     .domain(_.map(c, "id"))
     .range([0, c.length * 20 || 0]));
 
-export const categoryScale = derived(categories, c => d3
+export const categoryScale = derived(filteredCategories, c => d3
     .scaleBand()
     .padding(0.2)
     .range([0, 400])
-    .domain(c));
+    .domain(_.map(c, "id")));
 
 export const clientScrollOffset = writable(0);
