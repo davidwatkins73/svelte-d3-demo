@@ -1,10 +1,11 @@
 <script>
-    import {clients, clientScale, clientScrollOffset} from "./fancy-store";
+    import {filteredClients, clientScale, clientScrollOffset} from "./fancy-store";
 
+    $: console.log({filteredClients: $filteredClients});
 </script>
 
 <g transform={`translate(0, ${$clientScrollOffset})`}>
-{#each $clients as client}
+{#each $filteredClients as client}
     <g transform={`translate(0, ${$clientScale(client.id)})`}>
         <rect fill="#eee"
               stroke="#999"

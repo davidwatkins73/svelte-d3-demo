@@ -1,5 +1,5 @@
 <script>
-    import {categories, categoryScale, clients, arcs, clientScale, clientScrollOffset} from "./fancy-store";
+    import {categories, categoryScale, clients, filteredClients, arcs, filteredArcs, clientScale, clientScrollOffset, ratingColors, qry} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
     import _ from "lodash";
@@ -25,7 +25,6 @@
             cat: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"])
         }));
 
-
     $arcs = _
         .chain($clients)
         .flatMap(d => _.map(
@@ -33,15 +32,21 @@
             () => ({
                 clientId: d.id,
                 categoryId: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"]),
-                color: randomPick(["blue", "green", "red", "pink", "grey"])
+                ratingId: Math.ceil(Math.random() * 6)
             })))
         .value();
 
     function onScroll(evt) {
+
         clientScrollOffset.update(origValue => {
             const dy = evt.sourceEvent.wheelDeltaY;
+
+            const minY = _.clamp(
+                (($filteredClients.length * 20) * -1) + 480,
+                0);
+
             return dy
-                ? _.clamp(origValue + dy, (($clients.length * 20) * -1) + 480, 20)
+                ? _.clamp(origValue + dy, minY, 20)
                 : origValue;
         });
     }
@@ -68,19 +73,20 @@
                     y1,
                     y2,
                     showing,
-                    color: a.color
+                    color: ratingColors(a.ratingId)
                 };
             });
     }
 
-    $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $arcs);
+    $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $filteredArcs);
 
-
-    $: console.log({arcs: $arcs});
+    $: console.log({arcs: $filteredArcs});
 </script>
 
 
 <div >
+
+    <input type="text" bind:value={$qry}/>
     <svg bind:this={svgElem}
          viewBox="0 0 500 500"
          width="400"
