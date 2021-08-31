@@ -1,7 +1,5 @@
 <script>
     import {filteredClients, clientScale, clientScrollOffset} from "./fancy-store";
-
-    $: console.log({filteredClients: $filteredClients});
 </script>
 
 <g transform={`translate(0, ${$clientScrollOffset})`}>

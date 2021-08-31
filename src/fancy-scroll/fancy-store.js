@@ -23,6 +23,11 @@ export const filteredArcs = derived([arcs, filteredClients], ([acs, fcs]) => {
 });
 
 
+// turn cat into another object, indictor for plus, sepearte search for groups
+
+// affects other derived clients/arcs
+
+
 
 export const ratingColors = d3.scaleOrdinal()
     .domain([0, 1, 2, 3, 4, 5])

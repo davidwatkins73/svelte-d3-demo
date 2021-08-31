@@ -2,39 +2,16 @@
     import {categories, categoryScale, clients, filteredClients, arcs, filteredArcs, clientScale, clientScrollOffset, ratingColors, qry} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
+    import {mkCategories, mkClients, mkArcs} from "./fancy-utils"
     import _ from "lodash";
     import * as d3 from "d3";
 
-    function randomPick(xs) {
-        if (!xs) throw new Error("Cannot pick from a null set of options");
-
-        const choiceCount = xs.length - 1;
-        const idx = Math.round(Math.random() * choiceCount);
-        return xs[idx];
-    }
-
     let svgElem;
 
-    $categories = ["A", "B", "C", "D", "E"];
+    $categories = mkCategories();
+    $clients = mkClients();
 
-    $clients = _
-        .range(0, 140)
-        .map(d => ({
-            name: `c${d}`,
-            id: d,
-            cat: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"])
-        }));
-
-    $arcs = _
-        .chain($clients)
-        .flatMap(d => _.map(
-            _.range(Math.ceil(Math.random() * 5)),
-            () => ({
-                clientId: d.id,
-                categoryId: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"]),
-                ratingId: Math.ceil(Math.random() * 6)
-            })))
-        .value();
+    $arcs = mkArcs($clients);
 
     function onScroll(evt) {
 
@@ -80,7 +57,6 @@
 
     $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $filteredArcs);
 
-    $: console.log({arcs: $filteredArcs});
 </script>
 
 
