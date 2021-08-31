@@ -1,5 +1,5 @@
 <script>
-    import {categories, categoryScale, clients, clientScale, clientScrollOffset} from "./fancy-store";
+    import {categories, categoryScale, clients, arcs, clientScale, clientScrollOffset} from "./fancy-store";
     import Categories from "./Categories.svelte";
     import Clients from "./Clients.svelte";
     import _ from "lodash";
@@ -25,11 +25,23 @@
             cat: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"])
         }));
 
+
+    $arcs = _
+        .chain($clients)
+        .flatMap(d => _.map(
+            _.range(Math.ceil(Math.random() * 5)),
+            () => ({
+                clientId: d.id,
+                categoryId: randomPick(["A", "B", "C", "D", "E", "B", "B", "D"]),
+                color: randomPick(["blue", "green", "red", "pink", "grey"])
+            })))
+        .value();
+
     function onScroll(evt) {
         clientScrollOffset.update(origValue => {
             const dy = evt.sourceEvent.wheelDeltaY;
             return dy
-                ? _.clamp(origValue + dy, ($clients.length * 20) * -1, 20)
+                ? _.clamp(origValue + dy, (($clients.length * 20) * -1) + 480, 20)
                 : origValue;
         });
     }
@@ -46,8 +58,8 @@
         return _.map(
             arcs,
             a => {
-                const pos = clientY(a.id);
-                const y1 = categoryY(a.cat) + categoryY.bandwidth() / 2;
+                const pos = clientY(a.clientId);
+                const y1 = categoryY(a.categoryId) + categoryY.bandwidth() / 2;
                 const y2 = pos + offset + clientY.bandwidth() / 2;
                 const showing = pos > start && pos < end;
                 return {
@@ -55,14 +67,16 @@
                     x2: 400,
                     y1,
                     y2,
-                    showing
+                    showing,
+                    color: a.color
                 };
             });
     }
 
-    $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $clients);
+    $: screenArcs = updateShowing($clientScrollOffset, $clientScale, $categoryScale, $arcs);
 
 
+    $: console.log({arcs: $arcs});
 </script>
 
 
@@ -95,7 +109,7 @@
                       y1={arc.y1}
                       y2={arc.y2}
                       class={arc.showing ? "showing" : ""}
-                      stroke="green"/>
+                      stroke={arc.color}/>
             {/each}
         </g>
     </svg>
