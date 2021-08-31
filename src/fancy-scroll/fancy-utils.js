@@ -10,7 +10,8 @@ export const dimensions = {
         width: 150
     },
     clientList: {
-        paddingTop: 20
+        paddingTop: 20,
+        innerPadding: 1.8
     },
     diagram: {
         height: 500,

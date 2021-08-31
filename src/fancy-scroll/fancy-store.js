@@ -45,7 +45,7 @@ export const clientScale = derived(filteredClients, (c) => d3
     .scaleBand()
     .padding(0.2)
     .domain(_.map(c, "id"))
-    .range([0, c.length * dimensions.client.height * 1.2 || 0]));
+    .range([0, c.length * dimensions.client.height * dimensions.clientList.innerPadding || 0]));
 
 export const categoryScale = derived(filteredCategories, c => d3
     .scaleBand()

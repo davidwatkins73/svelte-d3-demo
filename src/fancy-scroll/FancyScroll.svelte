@@ -33,7 +33,7 @@
             const dy = evt.sourceEvent.wheelDeltaY;
 
             const minY = _.clamp(
-                (($filteredClients.length * dimensions.client.height) * -1) + 480,
+                $clientScale.range()[1] * -1 + 480,  //(($filteredClients.length * dimensions.client.height) * -1.2) + 480,
                 0);
 
             return dy
@@ -135,7 +135,7 @@
     line {
         opacity: 0.07;
         stroke-width: 0.5;
-        transition: opacity, stroke-width 1s;
+        xxtransition: opacity, stroke-width 1s;
     }
 
     :global(line.showing) {
