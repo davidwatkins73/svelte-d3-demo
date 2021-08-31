@@ -39,7 +39,7 @@ export const filteredArcs = derived([arcs, filteredClients, filteredCategories],
 
 export const ratingColors = d3.scaleOrdinal()
     .domain([0, 1, 2, 3, 4, 5])
-    .range(["grey", "red", "green", "pink", "blue", "purple"])
+    .range(["grey", "red", "green", "cyan", "blue", "purple"])
 
 export const clientScale = derived(filteredClients, (c) => d3
     .scaleBand()
