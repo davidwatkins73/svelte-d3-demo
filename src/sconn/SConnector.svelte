@@ -34,6 +34,7 @@
 
 <svg viewbox="0 0 300 300">
     <path d={mkPath(200, 100, 100, 205, c)}></path>
+    <path d={mkPath(130, 120, 300, 85, c)}></path>
 
 </svg>
 
