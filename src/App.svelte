@@ -14,6 +14,7 @@
 	import Fun from "./Fun.svelte";
 	import FlowDiagram2 from "./new_flows_diagram/FlowDiagram2.svelte"
 	import FancyScroll from "./fancy-scroll/FancyScroll.svelte";
+	import SConnector from "./sconn/SConnector.svelte";
 </script>
 
 <main>
@@ -22,6 +23,11 @@
 		A collection of simple visualisations created whilst learning about Svelte and D3.
 		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
 	</p>
+
+	<h2>S Connector</h2>
+	<div class="viz">
+		<SConnector/>
+	</div>
 
 	<h2>Fancy Scroll</h2>
 	<div xxclass="viz">
