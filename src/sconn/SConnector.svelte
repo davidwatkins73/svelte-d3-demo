@@ -3,21 +3,36 @@
         const dx = x2 - x1;
         const dy = y2 - y1;
 
-        const horizRatio = (1 - c) / 2;
-        const x1a = x1 + dx * horizRatio;
-        const x2a = x2 - dx * horizRatio;
+        // curve length, we don't want elongated curves - so pick the smallest
+        const cl = Math.min(
+            Math.abs(dy * c),
+            Math.abs(dx * c));
 
+        // middle
+        const xm = x1 + dx / 2;
+
+        // start and ending points of the curves,
+        // ..the ternary expr (?:) on the end ensures we are adding/removing as appropriate
+        const x1a = xm + cl * (x1 > x2 ? 1 : -1);
+        const x2a = xm - cl * (x1 > x2 ? 1 : -1);
+        const y1a = y1 + cl * (y1 > y2 ? -1 : 1);
+        const y2a = y2 - cl * (y1 > y2 ? -1 : 1);
+
+        // list of svg path commands
         const cmds = [
             `M${x1} ${y1}`,  // start pos
-            `L${x1a} ${y1}`,
-            `C${x2a} ${y1}, ${x1a} ${y2}, ${x2a} ${y2}`,
-            `L${x2} ${y2}`// end pos
+            `L${x1a} ${y1}`, // start horiz
+            `Q${xm} ${y1}, ${xm} ${y1a}`, // curve to vert
+            `L${xm} ${y2a}`, // vert
+            `Q${xm} ${y2}, ${x2a} ${y2}`, // curve to horiz
+            `L${x2} ${y2}`, // end horiz
         ];
 
+        // concat to make final command str
         return cmds.join(" ");
     }
 
-    let c = 0.3;
+    let c = 0.15;
 
     let x1 = 10;
     let y1 = 190;
@@ -26,6 +41,13 @@
 </script>
 
 
+
+<input bind:value={x1} type="range" min="10" max="290">
+<input bind:value={x2} type="range" min="10" max="290">
+<input bind:value={y1} type="range" min="10" max="290">
+<input bind:value={y2} type="range" min="10" max="290">
+<pre>L = ({x1} {y1}, {x2} {y2})</pre>
+<hr>
 <input bind:value={c}
        type="range"
        min="0.05"
@@ -37,7 +59,10 @@
 <svg viewbox="0 0 300 300">
     <line {x1} {y1} {x2} {y2}></line>
     <path d={mkPath(x1, y1, x2, y2, c)}></path>
-    <path d={mkPath(130, 120, 300, 85, c)}></path>
+    <circle r="3" fill="pink" cx={x2} cy={y2}></circle>
+<!--    <path d={mkPath(130, 120, 300, 85, c)}></path>-->
+<!--    <path d={mkPath(250, 10, 280, 280, c)}></path>-->
+<!--    <path d={mkPath(250, 10, 280, 280, c)}></path>-->
 
 </svg>
 
