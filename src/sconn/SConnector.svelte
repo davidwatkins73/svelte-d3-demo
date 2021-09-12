@@ -56,7 +56,7 @@
 
 <pre>Curve = {c}</pre>
 
-<svg viewbox="0 0 300 300">
+<svg viewbox="0 0 300 300" width="400" height="400">
     <line {x1} {y1} {x2} {y2}></line>
     <path d={lineToSPath(x1, y1, x2, y2, c)}></path>
     <circle r="5" fill="blue" opacity="0.5" cx={x2} cy={y2}></circle>
