@@ -1,5 +1,5 @@
 <script>
-    function mkPath(x1, y1, x2, y2, c = 0.2) {
+    function lineToSPath(x1, y1, x2, y2, c = 0.2) {
         const dx = x2 - x1;
         const dy = y2 - y1;
 
@@ -58,12 +58,9 @@
 
 <svg viewbox="0 0 300 300">
     <line {x1} {y1} {x2} {y2}></line>
-    <path d={mkPath(x1, y1, x2, y2, c)}></path>
-    <circle r="3" fill="pink" cx={x2} cy={y2}></circle>
-<!--    <path d={mkPath(130, 120, 300, 85, c)}></path>-->
-<!--    <path d={mkPath(250, 10, 280, 280, c)}></path>-->
-<!--    <path d={mkPath(250, 10, 280, 280, c)}></path>-->
-
+    <path d={lineToSPath(x1, y1, x2, y2, c)}></path>
+    <circle r="5" fill="blue" opacity="0.5" cx={x2} cy={y2}></circle>
+    <circle r="3" fill="green" opacity="0.5" cx={x1} cy={y1}></circle>
 </svg>
 
 <style>
