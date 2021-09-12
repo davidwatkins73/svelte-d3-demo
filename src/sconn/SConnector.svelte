@@ -46,7 +46,7 @@
 <input bind:value={x2} type="range" min="10" max="290">
 <input bind:value={y1} type="range" min="10" max="290">
 <input bind:value={y2} type="range" min="10" max="290">
-<pre>L = ({x1} {y1}, {x2} {y2})</pre>
+<pre>Line = ({x1} {y1}, {x2} {y2})</pre>
 <hr>
 <input bind:value={c}
        type="range"
@@ -54,7 +54,7 @@
        max="0.5"
        step="0.05">
 
-<pre>c = {c}</pre>
+<pre>Curve = {c}</pre>
 
 <svg viewbox="0 0 300 300">
     <line {x1} {y1} {x2} {y2}></line>
