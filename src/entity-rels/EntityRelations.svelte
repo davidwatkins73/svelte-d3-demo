@@ -3,13 +3,32 @@
     import _ from "lodash";
     import * as d3 from "d3";
 
+    function linkToId(d) {
+        return d.source + "_" + d.target;
+    }
+
+    function selectTag(tag) {
+        selectedTag = tag;
+        simulation
+            .alpha(0.5)
+            .restart();
+    }
+
+    function clearSelectedTag() {
+        selectedTag = null;
+    }
+
     let elem;
 
     const width = 1000;
     const height = 1000;
 
-    $: links = $model.relationships
-        .filter(d => d.source.primary || d.target.primary)
+    $: tags = _.values($model.tags);
+    $: selectedTag = _.find(tags, t => t.name === 'BCBS');
+
+    $: links = $model
+        .relationships
+        .filter(d => selectedTag === null || _.includes(d.tags, selectedTag))
         .map(d => Object.assign(
             {},
             d,
@@ -20,53 +39,60 @@
                 value: d.source.primary ? 7 : 3 + d.target.primary ? 7 : 3
             }));
 
+    $: taggedNodeIds = _
+        .chain(links)
+        .flatMap(d => [d.source, d.target])
+        .uniq()
+        .value();
 
-    $: nodes = $model.entities
-        // .filter(d => d.primary)
+    $: nodes = $model
+        .entities
         .map(d => Object.create(d));
 
+    $: simulation = d3
+        .forceSimulation(nodes, d => d.id)
+        .force("link", d3
+            .forceLink(links, linkToId)
+            .id(d => d.id)
+            .distance(100))
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("collide", d3.forceCollide().radius(50))
+        .force("center", d3.forceCenter(width / 2, height / 2));
 
     $: {
-        console.log({links, nodes})
-        let simulation = d3
-            .forceSimulation(nodes)
-            .force("link", d3
-                .forceLink(links)
-                .id(d => d.id)
-                .distance(100))
-            .force("charge", d3.forceManyBody().strength(-100))
-            .force("collide", d3.forceCollide().radius(40))
-            .force("center", d3.forceCenter(width / 2, height / 2));
-
         let svg = d3
             .select(elem)
             .attr("viewBox", [0, 0, width, height]);
 
         let link = svg
-            .append("g")
+            .select(".links")
             .attr("stroke", "#bbb")
             .attr("stroke-opacity", 0.6)
             .selectAll("line")
-            .data(links)
+            .data(links, linkToId)
             .join("line")
             .attr("stroke-width", d => Math.sqrt(d.value));
 
-        let node = svg.append("g")
+        let node = svg
+            .select(".nodes")
             .selectAll(".node")
-            .data(nodes)
+            .data(nodes, d => d.id)
             .join("g")
             .classed("node", true)
+            .attr("opacity", d => _.includes(taggedNodeIds, d.id)
+                ? 0.8
+                : 0.2)
             .call(drag(simulation));
 
         node
             .append("circle")
             .attr("r", d => d.primary ? 7 : 4)
-            .attr("opacity", 0.8)
             .attr("fill", d => d.primary
                 ? "#6fb379"
                 : "#adf3b9")
 
-        node.append("text")
+        node
+            .append("text")
             .attr("fill", "grey")
             .attr("dy", 16)
             .attr("dx", d => d.name.length * -3)
@@ -108,11 +134,29 @@
             .on("drag", dragged)
             .on("end", dragended);
     }
+
 </script>
 
 <svg width="100%"
      bind:this={elem}>
+    <g class="nodes"/>
+    <g class="links"/>
 </svg>
+
+<ul>
+    {#each tags as tag}
+        <li>
+            <button style={`background-color: ${selectedTag === tag ? "#999" : "#ccc"};`}
+                    class="btn-skinny"
+                    on:click={() => selectTag(tag)}>
+                {tag.name}
+            </button>
+        </li>
+    {/each}
+    <li>
+        <button class="btn-skinny" on:click={() => clearSelectedTag()}>Show All</button>
+    </li>
+</ul>
 
 <style>
     svg {
@@ -120,9 +164,11 @@
     }
     .node {
         pointer-events: all;
+
     }
 
     .node text {
         text-anchor: middle;
+        user-select: none;
     }
 </style>
