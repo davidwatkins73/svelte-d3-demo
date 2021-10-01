@@ -54,7 +54,7 @@
         .force("link", d3
             .forceLink(links, linkToId)
             .id(d => d.id)
-            .distance(100))
+            .distance(80))
         .force("charge", d3.forceManyBody().strength(-100))
         .force("collide", d3.forceCollide().radius(50))
         .force("center", d3.forceCenter(width / 2, height / 2));
