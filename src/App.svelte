@@ -12,10 +12,9 @@
 	import CurveDemo from "./flows/CurveDemo.svelte";
 	import ColorPickerDemo from "./cp/ColorPickerDemo.svelte";
 	import Fun from "./Fun.svelte";
-	import FlowDiagram2 from "./new_flows_diagram/FlowDiagram2.svelte"
 	import FancyScroll from "./fancy-scroll/FancyScroll.svelte";
 	import SConnector from "./sconn/SConnector.svelte";
-	import EntityRelations from "./entity-rels/EntityRelations.svelte";
+	import Waves from "./waves/Waves.svelte";
 </script>
 
 <main>
@@ -25,10 +24,11 @@
 		Code available on <a href="https://github.com/davidwatkins73/svelte-d3-demo">GitHub</a>.
 	</p>
 
-	<h2>Entities</h2>
+	<h2>Waves</h2>
 	<div class="viz">
-		<EntityRelations/>
+	    <Waves/>
 	</div>
+
 	<h2>S Connector</h2>
 	<div class="viz">
 		<SConnector/>
