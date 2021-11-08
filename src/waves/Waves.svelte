@@ -14,10 +14,10 @@
 
     const curveFn = d3
         .line(d => d.x, d => d.y)
-        .curve(d3.curveCatmullRom.alpha(0.5))
+        .curve(d3.curveBundle.beta(0.9))
 
 
-    function mkData(pts=5, height = 100, offset = 25, variation = 8) {
+    function mkData(pts=8, height = 100, offset = 25, variation = 100) {
         return [{x: 0, y: 0}]
             .concat(
                 _.chain(_.range(0, pts + 1))
@@ -31,7 +31,7 @@
 
 
 
-    let numWaves = 8
+    let numWaves = 3;
     let h = 200;
     let w = 35;
     $: paths = randomize(numWaves);
@@ -41,10 +41,10 @@
         return _
             .chain(_.range(0, waves))
             .map(idx => curveFn(mkData(
-                idx % 2 ? 4 : 5,
+                idx % 2 ? 8 : 10,
                 200,
-                35 - idx,
-                Math.random() * 8)))
+                45 -idx,
+                Math.random() * 24 + 4)))
             .value();
     }
 
@@ -65,10 +65,10 @@
 
         {#each paths as p}
             <path d={p}
-                  opacity="0.3"
+                  opacity={1 / (numWaves)}
                   stroke-width="0.4"
-                  stroke="#ddd"
-                  fill="#eee"/>
+                  stroke="#669eef"
+                  fill="#95d9ef"/>
         {/each}
     </g>
 
