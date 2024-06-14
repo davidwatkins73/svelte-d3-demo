@@ -173,6 +173,8 @@
         <col width="25%">
         <col width="25%">
     </colgroup>
+    <tbody>
+
     <tr>
         <td>
             Mid Band Outer Padding ({midPaddingOuter})
@@ -230,6 +232,7 @@
         <td>Width ({width})</td>
         <td><input type="range" min="0" max="2000" bind:value={width}/></td>
     </tr>
+    </tbody>
 </table>
 
 

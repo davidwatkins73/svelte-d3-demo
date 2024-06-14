@@ -134,6 +134,7 @@
         <th>Y</th>
     </tr>
     </thead>
+    <tbody>
     <tr style="color:purple">
         <td>Start</td>
         <td>{sx} {sy}</td>
@@ -166,6 +167,8 @@
         </td>
         <td></td>
     </tr>
+    </tbody>
+
 </table>
 
 <style>

@@ -51,6 +51,7 @@
 
 <div style="display: inline-block; width:60%;">
     <table style="width: 100%">
+        <tbody>
         {#each timelines as timeline, idx}
             <tr>
                 <td>
@@ -62,6 +63,7 @@
                 </td>
             </tr>
         {/each}
+        </tbody>
     </table>
 </div>
 <div style="width: 30%; display: inline-block; vertical-align: top">
